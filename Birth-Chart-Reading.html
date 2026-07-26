@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Birth Chart Reading — Ironbreaker Foresees</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&display=swap');
+
+  :root{
+    --ink:#eef2fb;
+    --ink-dim:#8d99b8;
+    --line-dim:#2a3350;
+    --ember:#a8431f;
+    --ember-glow:#d9743f;
+    --gold:#d9a406;
+    --trust-green:#7fb069;
+    --bg:#070b16;
+    --bg-2:#0e1526;
+    --paper:#fdfcf9;
+    --paper-edge:#ddd6c8;
+    --paper-ink:#2b2f45;
+    --paper-dim:#6b6f85;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; padding:0; background:var(--bg); color:var(--ink); font-family:'Fraunces',serif; overflow-x:hidden;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(1px 1px at 12% 14%, rgba(255,255,255,.55) 50%, transparent 51%),
+      radial-gradient(1px 1px at 78% 9%,  rgba(255,255,255,.40) 50%, transparent 51%),
+      radial-gradient(1.4px 1.4px at 34% 31%, rgba(255,255,255,.50) 50%, transparent 51%),
+      radial-gradient(1px 1px at 88% 42%, rgba(255,255,255,.35) 50%, transparent 51%),
+      radial-gradient(1px 1px at 21% 58%, rgba(255,255,255,.42) 50%, transparent 51%),
+      radial-gradient(1.2px 1.2px at 64% 71%, rgba(255,255,255,.45) 50%, transparent 51%),
+      radial-gradient(1px 1px at 45% 88%, rgba(255,255,255,.32) 50%, transparent 51%),
+      radial-gradient(1px 1px at 92% 84%, rgba(255,255,255,.38) 50%, transparent 51%),
+      radial-gradient(ellipse 120% 70% at 50% 0%, #16203a 0%, var(--bg-2) 45%, var(--bg) 100%);
+    background-attachment:fixed;
+  }
+
+  .wrap{max-width:540px; margin:0 auto; padding:28px 16px 70px;}
+
+  header{text-align:center; margin-bottom:24px;}
+  .eyebrow{font-size:11px; letter-spacing:2.5px; color:var(--ember-glow); font-weight:700; text-transform:uppercase;}
+  h1{font-size:29px; font-weight:600; margin:8px 0 4px; letter-spacing:0.5px;}
+  .sub{font-style:italic; color:var(--ink-dim); font-size:14.5px; margin:0 0 4px; line-height:1.55;}
+  .rule{width:62px; height:1px; background:var(--line-dim); margin:14px auto;}
+
+  .step{display:none;}
+  .step.show{display:block;}
+
+  /* ---------- WHITE FORM CARD ---------- */
+  #stepForm{
+    background:var(--paper); color:var(--paper-ink);
+    border-radius:12px; padding:22px 18px 26px;
+    box-shadow:0 10px 46px rgba(0,0,0,0.55);
+  }
+  .sectionHead{
+    font-size:10.5px; letter-spacing:2.4px; text-transform:uppercase; color:var(--ember);
+    font-weight:700; margin:30px 0 2px; padding-bottom:7px; border-bottom:1px solid var(--paper-edge);
+  }
+  #stepForm .sectionHead:first-child{margin-top:0;}
+  .questLabel{font-size:13px; color:var(--paper-dim); margin:18px 0 6px; font-weight:600;}
+  .fieldHint{font-size:11px; color:var(--paper-dim); margin-top:5px; line-height:1.5;}
+  input[type=text], input[type=email], textarea, select{
+    width:100%; background:#ffffff; border:1px solid var(--paper-edge); border-radius:5px;
+    color:var(--paper-ink); font-family:'Fraunces',serif; font-size:15px; padding:11px 12px; outline:none;
+    appearance:none; -webkit-appearance:none;
+  }
+  select{background-image:linear-gradient(45deg,transparent 50%,var(--paper-dim) 50%),linear-gradient(135deg,var(--paper-dim) 50%,transparent 50%);
+    background-position:calc(100% - 18px) 50%, calc(100% - 13px) 50%; background-size:5px 5px; background-repeat:no-repeat;}
+  input:focus, textarea:focus, select:focus{border-color:var(--ember-glow);}
+  input:disabled, select:disabled{opacity:0.45;}
+  textarea{min-height:64px; resize:vertical;}
+  .charCount{font-size:11px; color:var(--paper-dim); text-align:right; margin-top:4px;}
+  .optionalTag{color:var(--paper-dim); font-weight:400;}
+  .twoCol{display:flex; gap:10px;}
+  .twoCol > div{flex:1;}
+  .errMsg{font-size:11.5px; color:#b3261e; margin-top:5px; display:none;}
+  .errMsg.show{display:block;}
+
+  /* soft checkbox row */
+  .checkRow{display:flex; align-items:flex-start; gap:9px; margin-top:10px; cursor:pointer;}
+  .checkBox{
+    width:18px; height:18px; min-width:18px; margin-top:1px; border:1px solid var(--paper-edge);
+    border-radius:4px; background:#fff; position:relative;
+  }
+  .checkRow.on .checkBox{border-color:var(--ember); background:var(--ember);}
+  .checkRow.on .checkBox:after{
+    content:''; position:absolute; left:5.5px; top:2px; width:5px; height:9px;
+    border:solid #fff; border-width:0 2px 2px 0; transform:rotate(45deg);
+  }
+  .checkTxt{font-size:12.5px; color:var(--paper-dim); line-height:1.45;}
+
+  .coordBox{
+    display:none; margin-top:12px; padding:11px 13px; border:1px solid var(--paper-edge);
+    border-left:3px solid var(--ember-glow); background:rgba(217,116,63,0.06); border-radius:5px;
+  }
+  .coordBox.show{display:block;}
+  .coordTitle{font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--ember); font-weight:700; margin-bottom:5px;}
+  .coordVal{font-size:15px; color:var(--paper-ink); letter-spacing:0.5px;}
+  .coordSub{font-size:11px; color:var(--paper-dim); margin-top:4px; line-height:1.45;}
+
+  .manualToggle{
+    display:inline-block; margin-top:12px; font-size:12px; color:var(--ember);
+    text-decoration:underline; cursor:pointer; background:none; border:none; font-family:'Fraunces',serif; padding:0;
+  }
+  #manualPanel{display:none; margin-top:11px; padding:13px; border:1px dashed var(--paper-edge); border-radius:5px; background:#fbfaf6;}
+  #manualPanel.show{display:block;}
+
+  .statusRow, .genderRow{display:flex; flex-wrap:wrap; gap:8px; margin-top:4px;}
+  .statusBtn, .genBtnOpt{
+    flex:1 1 auto; background:#ffffff; border:1px solid var(--paper-edge); color:var(--paper-dim);
+    font-family:'Fraunces',serif; font-size:13px; padding:10px 12px; border-radius:5px; cursor:pointer;
+  }
+  .statusBtn.active, .genBtnOpt.active{border-color:var(--ember); color:var(--paper-ink); background:rgba(217,116,63,0.07);}
+
+  /* ---------- REFINED RANKING ---------- */
+  .categoryGrid{display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:6px;}
+  .catBtn{
+    position:relative; background:#ffffff; border:1px solid var(--paper-edge); color:var(--paper-dim);
+    font-family:'Fraunces',serif; font-size:14px; padding:15px 12px 15px 15px; border-radius:5px;
+    cursor:pointer; text-align:left; transition:background .18s ease, border-color .18s ease, color .18s ease;
+  }
+  .catBtn.active{
+    border-color:var(--ember); color:var(--paper-ink); background:rgba(217,116,63,0.055);
+    box-shadow:inset 3px 0 0 var(--ember);
+  }
+  .rankNum{
+    position:absolute; right:11px; top:50%; transform:translateY(-50%);
+    font-size:12px; font-weight:600; color:var(--ember); letter-spacing:1px; opacity:0;
+    transition:opacity .18s ease;
+  }
+  .catBtn.active .rankNum{opacity:1;}
+  .rankSummary{
+    margin-top:11px; font-size:12.5px; color:var(--ember); letter-spacing:1.2px;
+    text-align:center; min-height:17px; font-weight:600;
+  }
+
+  .primary{
+    width:100%; background:var(--ember-glow); color:#1a1208; border:none; border-radius:5px;
+    font-family:'Fraunces',serif; font-weight:700; font-size:15.5px; padding:15px; margin-top:28px; cursor:pointer;
+  }
+  .primary:disabled{opacity:0.35;}
+  .ghost{
+    background:transparent; border:1px solid var(--line-dim); color:var(--ink-dim);
+    font-family:'Fraunces',serif; font-size:13.5px; padding:12px 20px; border-radius:5px; cursor:pointer;
+  }
+  .hint{font-size:11.5px; color:var(--paper-dim); text-align:center; margin-top:10px; line-height:1.5;}
+
+  .chartStage{display:flex; align-items:center; justify-content:center; margin:12px 0;}
+  #chartCanvas{max-width:100%; height:auto; border-radius:10px; box-shadow:0 10px 46px rgba(0,0,0,0.6);}
+  .instruction{font-size:13.5px; color:var(--ink-dim); line-height:1.5; max-width:330px; margin:0 auto 6px; text-align:center; min-height:20px;}
+
+  #progressWrap{position:fixed; left:0; right:0; top:0; height:3px; background:rgba(255,255,255,.07); z-index:50;}
+  #progressBar{height:100%; width:0%; background:linear-gradient(90deg,var(--ember),var(--gold)); transition:width .3s ease;}
+
+  #stepResult{text-align:center; padding-top:6px;}
+  #resultCanvas{max-width:100%; border-radius:8px; margin-bottom:18px; background:#0b1224; box-shadow:0 10px 46px rgba(0,0,0,0.6);}
+  .resultTitle{font-family:'Fraunces',serif; font-weight:600; font-size:21px; color:var(--gold); margin-bottom:9px;}
+  .resultText{font-size:13.5px; color:var(--ink-dim); line-height:1.6; margin-bottom:15px;}
+  .resultHint{font-size:12px; color:var(--ink-dim); margin-bottom:14px; min-height:16px;}
+  .resultHint.successMsg{color:var(--trust-green); font-weight:600;}
+  .actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:center;}
+  .actions .primary{margin-top:0; flex:1 1 100%;}
+  .fallbackNote{font-size:11.5px; color:var(--ink-dim); margin-top:12px; line-height:1.5;}
+  .deliveryNote{font-size:12.5px; color:var(--trust-green); line-height:1.55; margin-top:22px; text-align:center; font-weight:600;}
+  .disclaimer{font-size:10.5px; color:var(--ink-dim); line-height:1.55; margin-top:26px; text-align:center; opacity:.75;}
+
+  .summaryCard{
+    background:rgba(255,255,255,.035); border:1px solid var(--line-dim); border-radius:8px;
+    padding:15px 16px; margin-bottom:18px; text-align:left;
+  }
+  .summaryCard h3{
+    margin:0 0 10px; font-size:10.5px; letter-spacing:2.2px; text-transform:uppercase;
+    color:var(--ember-glow); font-weight:700;
+  }
+  .bigThree{display:flex; gap:8px; margin-bottom:12px;}
+  .bigThree > div{
+    flex:1; text-align:center; padding:11px 4px; border:1px solid var(--line-dim); border-radius:6px;
+  }
+  .bigThree .lbl{font-size:9.5px; letter-spacing:1.6px; text-transform:uppercase; color:var(--ink-dim);}
+  .bigThree .val{font-size:14.5px; margin-top:5px; color:var(--ink);}
+  .sumLine{font-size:12.5px; color:var(--ink-dim); line-height:1.7;}
+  .sumLine b{color:var(--ink); font-weight:600;}
+</style>
+</head>
+<body>
+
+<div id="progressWrap"><div id="progressBar"></div></div>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Ironbreaker Foresees — Real Birth Chart</div>
+    <h1>Birth Chart Reading</h1>
+    <p class="sub">Most horoscope tests only look at your Sun.<br>We chart the entire sky at the moment you were born.</p>
+    <div class="rule"></div>
+  </header>
+
+  <!-- STEP 1: FORM -->
+  <section class="step show" id="stepForm">
+
+    <div class="sectionHead">Part I — The Moment</div>
+
+    <p class="questLabel">Full name</p>
+    <input id="nameInput" type="text" placeholder="First and last name" maxlength="90" autocomplete="off">
+
+    <div class="twoCol">
+      <div>
+        <p class="questLabel">Date of birth</p>
+        <input id="birthInput" type="text" inputmode="numeric" placeholder="DD/MM/YYYY" maxlength="10" autocomplete="off">
+      </div>
+      <div>
+        <p class="questLabel">Time of birth</p>
+        <input id="timeInput" type="text" inputmode="numeric" placeholder="HH:MM (24h)" maxlength="5" autocomplete="off">
+      </div>
+    </div>
+    <p class="fieldHint">As exact as possible — check your birth certificate if you can. Even 15 minutes can shift your rising sign.</p>
+    <div class="errMsg" id="dateErr"></div>
+
+    <div class="checkRow" id="noTimeRow">
+      <div class="checkBox"></div>
+      <div class="checkTxt">I don't know my birth time. <span style="opacity:.8">We'll cast a noon chart — your planets stay accurate, but the rising sign and houses can't be fixed.</span></div>
+    </div>
+
+    <div class="sectionHead">Part II — The Place</div>
+
+    <p class="questLabel">Country of birth</p>
+    <select id="countryInput"><option value="">Select your country…</option></select>
+
+    <p class="questLabel">City of birth</p>
+    <select id="cityInput" disabled><option value="">Select your country first…</option></select>
+    <p class="fieldHint">If your birthplace isn't listed, choose the nearest listed city — within a hundred kilometres it reads the same sky. If nothing is close enough, enter coordinates manually.</p>
+
+    <button type="button" class="manualToggle" id="manualToggle">Enter coordinates manually instead</button>
+    <div id="manualPanel">
+      <div class="twoCol">
+        <div>
+          <p class="questLabel" style="margin-top:0;">Latitude</p>
+          <input id="latInput" type="text" inputmode="decimal" placeholder="e.g. 41.0082" maxlength="12">
+        </div>
+        <div>
+          <p class="questLabel" style="margin-top:0;">Longitude</p>
+          <input id="lonInput" type="text" inputmode="decimal" placeholder="e.g. 28.9784" maxlength="12">
+        </div>
+      </div>
+      <p class="questLabel">Time zone at birth (UTC offset)</p>
+      <select id="tzManual"><option value="">Select your UTC offset…</option></select>
+      <p class="fieldHint">Search "[your city] latitude longitude" and copy the two numbers. Minus for South or West (e.g. -74.0060). Manual entries are used exactly as typed — daylight saving is not applied.</p>
+    </div>
+
+    <div class="coordBox" id="coordBox">
+      <div class="coordTitle">Coordinates locked</div>
+      <div class="coordVal" id="coordVal"></div>
+      <div class="coordSub" id="coordSub"></div>
+    </div>
+
+    <div class="sectionHead">Part III — The Life</div>
+
+    <p class="questLabel">Gender</p>
+    <div class="genderRow" id="genderRow">
+      <button type="button" class="genBtnOpt" data-gender="Woman">Woman</button>
+      <button type="button" class="genBtnOpt" data-gender="Man">Man</button>
+      <button type="button" class="genBtnOpt" data-gender="Prefer not to say">Prefer not to say</button>
+    </div>
+
+    <p class="questLabel">Occupation</p>
+    <input id="occupationInput" type="text" placeholder="What do you do?" maxlength="90" autocomplete="off">
+
+    <p class="questLabel">Relationship status</p>
+    <div class="statusRow" id="statusRow">
+      <button type="button" class="statusBtn" data-status="Single">Single</button>
+      <button type="button" class="statusBtn" data-status="In a relationship">In a relationship</button>
+      <button type="button" class="statusBtn" data-status="Married">Married</button>
+      <button type="button" class="statusBtn" data-status="It's complicated">It's complicated</button>
+    </div>
+
+    <p class="questLabel">Rank these from most to least important to you — tap in order. Tap again to undo.</p>
+    <div class="categoryGrid" id="categoryRow">
+      <button type="button" class="catBtn" data-cat="Love">Love<span class="rankNum"></span></button>
+      <button type="button" class="catBtn" data-cat="Career">Career<span class="rankNum"></span></button>
+      <button type="button" class="catBtn" data-cat="Money">Money<span class="rankNum"></span></button>
+      <button type="button" class="catBtn" data-cat="Legacy">Legacy<span class="rankNum"></span></button>
+    </div>
+    <div class="rankSummary" id="rankSummary"></div>
+
+    <div class="sectionHead">Part IV — What You Carry</div>
+
+    <p class="questLabel">If you could have anything at all, what would you wish for?</p>
+    <textarea id="wishInput" placeholder="No limits — what would it be?" maxlength="120"></textarea>
+    <div class="charCount" id="wishCount"></div>
+
+    <p class="questLabel">What's the biggest obstacle in your life right now?</p>
+    <textarea id="obstacleInput" placeholder="What stands in your way?" maxlength="120"></textarea>
+    <div class="charCount" id="obstacleCount"></div>
+
+    <p class="questLabel">Are you at a crossroads right now? What are you torn between?</p>
+    <textarea id="crossroadsInput" placeholder="The choice you can't make yet…" maxlength="120"></textarea>
+    <div class="charCount" id="crossroadsCount"></div>
+
+    <p class="questLabel">Anything else you'd like us to know? <span class="optionalTag">(optional)</span></p>
+    <textarea id="extraInput" placeholder="Anything at all…" maxlength="120"></textarea>
+    <div class="charCount" id="extraCount"></div>
+
+    <div class="sectionHead">Part V — So We Can Find You</div>
+
+    <p class="questLabel">Etsy order number <span class="optionalTag">(optional — but it gets your reading to you faster)</span></p>
+    <input id="orderInput" type="text" placeholder="e.g. 3812345678" maxlength="30" autocomplete="off">
+
+    <p class="questLabel">Email — if you'd like occasional messages from Ironbreaker <span class="optionalTag">(optional)</span></p>
+    <input id="emailInput" type="email" placeholder="you@example.com" maxlength="90" autocomplete="off">
+    <div class="errMsg" id="emailErr">That doesn't look like a valid email address.</div>
+
+    <button class="primary" id="genBtn" disabled>Generate My Chart</button>
+    <p class="hint" id="formHint">Fill in your name, a valid birth date and time, your birthplace, and rank all four categories to continue.</p>
+  </section>
+
+  <!-- STEP 2: CHART REVEAL -->
+  <section class="step" id="stepChart">
+    <p class="instruction" id="chartInstruction">Reading the sky at the moment you arrived…</p>
+    <div class="chartStage">
+      <canvas id="chartCanvas" width="680" height="680"></canvas>
+    </div>
+  </section>
+
+  <!-- STEP 3: RESULT -->
+  <section class="step" id="stepResult">
+    <canvas id="resultCanvas" width="900" height="1700"></canvas>
+
+    <div class="summaryCard">
+      <h3>Your Chart At A Glance</h3>
+      <div class="bigThree">
+        <div><div class="lbl">Sun</div><div class="val" id="bigSun">—</div></div>
+        <div><div class="lbl">Moon</div><div class="val" id="bigMoon">—</div></div>
+        <div><div class="lbl">Rising</div><div class="val" id="bigAsc">—</div></div>
+      </div>
+      <div class="sumLine" id="sumLines"></div>
+    </div>
+
+    <div class="resultTitle">Charted</div>
+    <div class="resultText">Save this image and send it to us in Etsy Messages — your personal reading on love, career, money and legacy will arrive there.</div>
+    <div class="resultHint" id="shareStatus">Tap below — you'll be able to save the image or send it directly.</div>
+    <div class="actions" id="mainActions">
+      <button class="primary" id="sendBtn">Save / Send</button>
+      <button class="ghost" id="copyBtn">Copy my details as text</button>
+      <button class="ghost" id="editBtn">← Edit my answers</button>
+    </div>
+    <div class="fallbackNote">If your device doesn't save it, a screenshot works just as well.</div>
+    <div class="deliveryNote">Your reading will be written by hand by Ironbreaker's Reading Team within 24–48 hours.</div>
+    <div class="disclaimer">
+      This reading is offered for self-exploration, creative reflection and entertainment.<br>
+      It is not medical, financial, legal or psychological advice.
+    </div>
+  </section>
+</div>
+
+<script>
+  const isSafari = /^((?!chrome|android|crios|fxios|edg).)*safari/i.test(navigator.userAgent);
+
+  /* =========================================================
+     CITY DATABASE — 200 countries.
+     Format: 'Country':{dst:rule, cities:[[name, lat, lon, baseUtcOffset, (dstOverride)]]}
+     dst rules: eu | us | au | nz | tr | br | ru | cl | mx | ir | il | eg | py | cn | none
+     ========================================================= */
+  const GEO = {
+
+  /* ---------------- EUROPE ---------------- */
+  'Albania':{tz:'Europe/Tirane',dst:'eu',cities:[['Tirana',41.3275,19.8187,1],['Durrës',41.3231,19.4414,1],['Vlorë',40.4661,19.4914,1],['Shkodër',42.0693,19.5033,1],['Elbasan',41.1125,20.0822,1]]},
+  'Andorra':{tz:'Europe/Andorra',dst:'eu',cities:[['Andorra la Vella',42.5063,1.5218,1]]},
+  'Austria':{tz:'Europe/Vienna',dst:'eu',cities:[['Vienna',48.2082,16.3738,1],['Graz',47.0707,15.4395,1],['Linz',48.3069,14.2858,1],['Salzburg',47.8095,13.0550,1],['Innsbruck',47.2692,11.4041,1],['Klagenfurt',46.6247,14.3050,1],['Villach',46.6111,13.8558,1],['Wels',48.1575,14.0289,1]]},
+  'Belarus':{tz:'Europe/Minsk',dst:'ru',cities:[['Minsk',53.9006,27.5590,3],['Gomel',52.4345,30.9754,3],['Mogilev',53.9007,30.3313,3],['Vitebsk',55.1904,30.2049,3],['Grodno',53.6884,23.8258,3],['Brest',52.0975,23.7340,3]]},
+  'Belgium':{tz:'Europe/Brussels',dst:'eu',cities:[['Brussels',50.8503,4.3517,1],['Antwerp',51.2194,4.4025,1],['Ghent',51.0543,3.7174,1],['Charleroi',50.4108,4.4446,1],['Liège',50.6326,5.5797,1],['Bruges',51.2093,3.2247,1],['Namur',50.4674,4.8720,1],['Leuven',50.8798,4.7005,1]]},
+  'Bosnia and Herzegovina':{tz:'Europe/Sarajevo',dst:'eu',cities:[['Sarajevo',43.8563,18.4131,1],['Banja Luka',44.7722,17.1910,1],['Tuzla',44.5384,18.6739,1],['Zenica',44.2039,17.9078,1],['Mostar',43.3438,17.8078,1]]},
+  'Bulgaria':{tz:'Europe/Sofia',dst:'eu',cities:[['Sofia',42.6977,23.3219,2],['Plovdiv',42.1354,24.7453,2],['Varna',43.2141,27.9147,2],['Burgas',42.5048,27.4626,2],['Ruse',43.8356,25.9657,2],['Stara Zagora',42.4258,25.6345,2],['Pleven',43.4170,24.6067,2]]},
+  'Croatia':{tz:'Europe/Zagreb',dst:'eu',cities:[['Zagreb',45.8150,15.9819,1],['Split',43.5081,16.4402,1],['Rijeka',45.3271,14.4422,1],['Osijek',45.5550,18.6955,1],['Zadar',44.1194,15.2314,1],['Dubrovnik',42.6507,18.0944,1]]},
+  'Cyprus':{tz:'Asia/Nicosia',dst:'eu',cities:[['Nicosia',35.1856,33.3823,2],['Limassol',34.7071,33.0226,2],['Larnaca',34.9182,33.6201,2],['Paphos',34.7720,32.4297,2],['Famagusta',35.1264,33.9370,2],['Kyrenia',35.3417,33.3192,2]]},
+  'Czechia':{tz:'Europe/Prague',dst:'eu',cities:[['Prague',50.0755,14.4378,1],['Brno',49.1951,16.6068,1],['Ostrava',49.8209,18.2625,1],['Plzeň',49.7384,13.3736,1],['Olomouc',49.5938,17.2509,1],['Liberec',50.7663,15.0543,1],['České Budějovice',48.9745,14.4746,1]]},
+  'Denmark':{tz:'Europe/Copenhagen',dst:'eu',cities:[['Copenhagen',55.6761,12.5683,1],['Aarhus',56.1629,10.2039,1],['Odense',55.4038,10.4024,1],['Aalborg',57.0488,9.9217,1],['Esbjerg',55.4765,8.4594,1],['Randers',56.4607,10.0364,1]]},
+  'Estonia':{tz:'Europe/Tallinn',dst:'eu',cities:[['Tallinn',59.4370,24.7536,2],['Tartu',58.3780,26.7290,2],['Narva',59.3797,28.1791,2],['Pärnu',58.3859,24.4971,2]]},
+  'Finland':{tz:'Europe/Helsinki',dst:'eu',cities:[['Helsinki',60.1699,24.9384,2],['Espoo',60.2055,24.6559,2],['Tampere',61.4978,23.7610,2],['Vantaa',60.2934,25.0378,2],['Oulu',65.0121,25.4651,2],['Turku',60.4518,22.2666,2],['Jyväskylä',62.2426,25.7473,2],['Rovaniemi',66.5039,25.7294,2]]},
+  'France':{tz:'Europe/Paris',dst:'eu',cities:[['Paris',48.8566,2.3522,1],['Marseille',43.2965,5.3698,1],['Lyon',45.7640,4.8357,1],['Toulouse',43.6047,1.4442,1],['Nice',43.7102,7.2620,1],['Nantes',47.2184,-1.5536,1],['Montpellier',43.6108,3.8767,1],['Strasbourg',48.5734,7.7521,1],['Bordeaux',44.8378,-0.5792,1],['Lille',50.6292,3.0573,1],['Rennes',48.1173,-1.6778,1],['Reims',49.2583,4.0317,1],['Le Havre',49.4944,0.1079,1],['Saint-Étienne',45.4397,4.3872,1],['Toulon',43.1242,5.9280,1],['Grenoble',45.1885,5.7245,1],['Dijon',47.3220,5.0415,1],['Angers',47.4784,-0.5632,1],['Nîmes',43.8367,4.3601,1],['Clermont-Ferrand',45.7772,3.0870,1],['Brest',48.3904,-4.4861,1],['Ajaccio',41.9192,8.7386,1]]},
+  'Germany':{tz:'Europe/Berlin',dst:'eu',cities:[['Berlin',52.5200,13.4050,1],['Hamburg',53.5511,9.9937,1],['Munich',48.1351,11.5820,1],['Cologne',50.9375,6.9603,1],['Frankfurt',50.1109,8.6821,1],['Stuttgart',48.7758,9.1829,1],['Düsseldorf',51.2277,6.7735,1],['Leipzig',51.3397,12.3731,1],['Dortmund',51.5136,7.4653,1],['Essen',51.4556,7.0116,1],['Bremen',53.0793,8.8017,1],['Dresden',51.0504,13.7373,1],['Hanover',52.3759,9.7320,1],['Nuremberg',49.4521,11.0767,1],['Duisburg',51.4344,6.7623,1],['Bochum',51.4818,7.2162,1],['Wuppertal',51.2562,7.1508,1],['Bielefeld',52.0302,8.5325,1],['Bonn',50.7374,7.0982,1],['Münster',51.9607,7.6261,1],['Karlsruhe',49.0069,8.4037,1],['Mannheim',49.4875,8.4660,1],['Augsburg',48.3705,10.8978,1],['Wiesbaden',50.0782,8.2398,1],['Kiel',54.3233,10.1228,1],['Freiburg',47.9990,7.8421,1],['Rostock',54.0924,12.0991,1],['Saarbrücken',49.2402,6.9969,1]]},
+  'Greece':{tz:'Europe/Athens',dst:'eu',cities:[['Athens',37.9838,23.7275,2],['Thessaloniki',40.6401,22.9444,2],['Patras',38.2466,21.7346,2],['Heraklion',35.3387,25.1442,2],['Larissa',39.6390,22.4191,2],['Volos',39.3622,22.9422,2],['Rhodes',36.4341,28.2176,2],['Ioannina',39.6650,20.8537,2],['Chania',35.5138,24.0180,2],['Kavala',40.9396,24.4069,2]]},
+  'Hungary':{tz:'Europe/Budapest',dst:'eu',cities:[['Budapest',47.4979,19.0402,1],['Debrecen',47.5316,21.6273,1],['Szeged',46.2530,20.1414,1],['Miskolc',48.1035,20.7784,1],['Pécs',46.0727,18.2323,1],['Győr',47.6875,17.6504,1],['Nyíregyháza',47.9554,21.7167,1]]},
+  'Iceland':{tz:'Atlantic/Reykjavik',dst:'none',cities:[['Reykjavík',64.1466,-21.9426,0],['Akureyri',65.6885,-18.1262,0],['Hafnarfjörður',64.0671,-21.9394,0]]},
+  'Ireland':{tz:'Europe/Dublin',dst:'eu',cities:[['Dublin',53.3498,-6.2603,0],['Cork',51.8985,-8.4756,0],['Limerick',52.6638,-8.6267,0],['Galway',53.2707,-9.0568,0],['Waterford',52.2593,-7.1101,0],['Drogheda',53.7189,-6.3478,0]]},
+  'Italy':{tz:'Europe/Rome',dst:'eu',cities:[['Rome',41.9028,12.4964,1],['Milan',45.4642,9.1900,1],['Naples',40.8518,14.2681,1],['Turin',45.0703,7.6869,1],['Palermo',38.1157,13.3615,1],['Genoa',44.4056,8.9463,1],['Bologna',44.4949,11.3426,1],['Florence',43.7696,11.2558,1],['Bari',41.1171,16.8719,1],['Catania',37.5079,15.0830,1],['Venice',45.4408,12.3155,1],['Verona',45.4384,10.9916,1],['Messina',38.1938,15.5540,1],['Padua',45.4064,11.8768,1],['Trieste',45.6495,13.7768,1],['Brescia',45.5416,10.2118,1],['Taranto',40.4644,17.2470,1],['Cagliari',39.2238,9.1217,1],['Perugia',43.1107,12.3908,1],['Rimini',44.0678,12.5695,1]]},
+  'Kosovo':{tz:'Europe/Belgrade',dst:'eu',cities:[['Pristina',42.6629,21.1655,1],['Prizren',42.2139,20.7397,1],['Peja',42.6600,20.2883,1]]},
+  'Latvia':{tz:'Europe/Riga',dst:'eu',cities:[['Riga',56.9496,24.1052,2],['Daugavpils',55.8747,26.5362,2],['Liepāja',56.5047,21.0108,2],['Jelgava',56.6511,23.7214,2]]},
+  'Liechtenstein':{tz:'Europe/Vaduz',dst:'eu',cities:[['Vaduz',47.1410,9.5209,1]]},
+  'Lithuania':{tz:'Europe/Vilnius',dst:'eu',cities:[['Vilnius',54.6872,25.2797,2],['Kaunas',54.8985,23.9036,2],['Klaipėda',55.7033,21.1443,2],['Šiauliai',55.9333,23.3167,2],['Panevėžys',55.7333,24.3500,2]]},
+  'Luxembourg':{tz:'Europe/Luxembourg',dst:'eu',cities:[['Luxembourg City',49.6116,6.1319,1],['Esch-sur-Alzette',49.4958,5.9806,1]]},
+  'Malta':{tz:'Europe/Malta',dst:'eu',cities:[['Valletta',35.8989,14.5146,1],['Birkirkara',35.8972,14.4611,1],['Sliema',35.9122,14.5044,1]]},
+  'Moldova':{tz:'Europe/Chisinau',dst:'eu',cities:[['Chișinău',47.0105,28.8638,2],['Tiraspol',46.8403,29.6433,2],['Bălți',47.7615,27.9294,2]]},
+  'Monaco':{tz:'Europe/Monaco',dst:'eu',cities:[['Monaco',43.7384,7.4246,1]]},
+  'Montenegro':{tz:'Europe/Podgorica',dst:'eu',cities:[['Podgorica',42.4304,19.2594,1],['Nikšić',42.7731,18.9445,1],['Herceg Novi',42.4531,18.5375,1]]},
+  'Netherlands':{tz:'Europe/Amsterdam',dst:'eu',cities:[['Amsterdam',52.3676,4.9041,1],['Rotterdam',51.9244,4.4777,1],['The Hague',52.0705,4.3007,1],['Utrecht',52.0907,5.1214,1],['Eindhoven',51.4416,5.4697,1],['Groningen',53.2194,6.5665,1],['Tilburg',51.5555,5.0913,1],['Almere',52.3508,5.2647,1],['Breda',51.5719,4.7683,1],['Nijmegen',51.8126,5.8372,1],['Maastricht',50.8514,5.6910,1]]},
+  'North Macedonia':{tz:'Europe/Skopje',dst:'eu',cities:[['Skopje',41.9973,21.4280,1],['Bitola',41.0297,21.3292,1],['Kumanovo',42.1322,21.7144,1],['Ohrid',41.1231,20.8016,1]]},
+  'Norway':{tz:'Europe/Oslo',dst:'eu',cities:[['Oslo',59.9139,10.7522,1],['Bergen',60.3913,5.3221,1],['Trondheim',63.4305,10.3951,1],['Stavanger',58.9700,5.7331,1],['Drammen',59.7440,10.2045,1],['Tromsø',69.6492,18.9553,1],['Kristiansand',58.1467,7.9956,1]]},
+  'Poland':{tz:'Europe/Warsaw',dst:'eu',cities:[['Warsaw',52.2297,21.0122,1],['Krakow',50.0647,19.9450,1],['Łódź',51.7592,19.4560,1],['Wrocław',51.1079,17.0385,1],['Poznań',52.4064,16.9252,1],['Gdańsk',54.3520,18.6466,1],['Szczecin',53.4285,14.5528,1],['Bydgoszcz',53.1235,18.0084,1],['Lublin',51.2465,22.5684,1],['Katowice',50.2649,19.0238,1],['Białystok',53.1325,23.1688,1],['Rzeszów',50.0413,21.9990,1]]},
+  'Portugal':{tz:'Europe/Lisbon',dst:'eu',cities:[['Lisbon',38.7223,-9.1393,0],['Porto',41.1579,-8.6291,0],['Braga',41.5454,-8.4265,0],['Coimbra',40.2033,-8.4103,0],['Funchal',32.6669,-16.9241,0],['Faro',37.0194,-7.9304,0],['Setúbal',38.5244,-8.8882,0],['Aveiro',40.6405,-8.6538,0]]},
+  'Romania':{tz:'Europe/Bucharest',dst:'eu',cities:[['Bucharest',44.4268,26.1025,2],['Cluj-Napoca',46.7712,23.6236,2],['Timișoara',45.7489,21.2087,2],['Iași',47.1585,27.6014,2],['Constanța',44.1598,28.6348,2],['Craiova',44.3302,23.7949,2],['Brașov',45.6427,25.5887,2],['Galați',45.4353,28.0080,2],['Oradea',47.0465,21.9189,2],['Sibiu',45.7983,24.1256,2]]},
+  'Russia':{tz:'Europe/Moscow',tzCity:{"Chelyabinsk":'Asia/Yekaterinburg',"Irkutsk":'Asia/Irkutsk',"Kaliningrad":'Europe/Kaliningrad',"Khabarovsk":'Asia/Vladivostok',"Krasnoyarsk":'Asia/Krasnoyarsk',"Novosibirsk":'Asia/Novosibirsk',"Omsk":'Asia/Omsk',"Perm":'Asia/Yekaterinburg',"Samara":'Europe/Samara',"Saratov":'Europe/Saratov',"Tyumen":'Asia/Yekaterinburg',"Ufa":'Asia/Yekaterinburg',"Vladivostok":'Asia/Vladivostok',"Yekaterinburg":'Asia/Yekaterinburg'},dst:'ru',cities:[['Moscow',55.7558,37.6173,3],['St. Petersburg',59.9311,30.3609,3],['Novosibirsk',55.0084,82.9357,7],['Yekaterinburg',56.8389,60.6057,5],['Kazan',55.8304,49.0661,3],['Nizhny Novgorod',56.2965,43.9361,3],['Chelyabinsk',55.1644,61.4368,5],['Samara',53.2415,50.2212,4],['Omsk',54.9885,73.3242,6],['Rostov-on-Don',47.2357,39.7015,3],['Ufa',54.7388,55.9721,5],['Krasnoyarsk',56.0153,92.8932,7],['Perm',58.0105,56.2502,5],['Voronezh',51.6720,39.1843,3],['Volgograd',48.7080,44.5133,3],['Krasnodar',45.0355,38.9753,3],['Saratov',51.5336,46.0343,4],['Tyumen',57.1522,65.5272,5],['Irkutsk',52.2870,104.3050,8],['Vladivostok',43.1332,131.9113,10],['Khabarovsk',48.4827,135.0838,10],['Kaliningrad',54.7104,20.4522,2],['Sochi',43.6028,39.7342,3],['Murmansk',68.9585,33.0827,3]]},
+  'San Marino':{tz:'Europe/San_Marino',dst:'eu',cities:[['San Marino',43.9424,12.4578,1]]},
+  'Serbia':{tz:'Europe/Belgrade',dst:'eu',cities:[['Belgrade',44.7866,20.4489,1],['Novi Sad',45.2671,19.8335,1],['Niš',43.3209,21.8958,1],['Kragujevac',44.0128,20.9114,1],['Subotica',46.1006,19.6650,1]]},
+  'Slovakia':{tz:'Europe/Bratislava',dst:'eu',cities:[['Bratislava',48.1486,17.1077,1],['Košice',48.7164,21.2611,1],['Prešov',48.9985,21.2339,1],['Žilina',49.2231,18.7394,1],['Nitra',48.3069,18.0864,1]]},
+  'Slovenia':{tz:'Europe/Ljubljana',dst:'eu',cities:[['Ljubljana',46.0569,14.5058,1],['Maribor',46.5547,15.6459,1],['Celje',46.2311,15.2683,1],['Koper',45.5481,13.7302,1]]},
+  'Spain':{tz:'Europe/Madrid',tzCity:{"Las Palmas":'Atlantic/Canary',"Santa Cruz de Tenerife":'Atlantic/Canary'},dst:'eu',cities:[['Madrid',40.4168,-3.7038,1],['Barcelona',41.3874,2.1686,1],['Valencia',39.4699,-0.3763,1],['Seville',37.3891,-5.9845,1],['Zaragoza',41.6488,-0.8891,1],['Málaga',36.7213,-4.4213,1],['Murcia',37.9922,-1.1307,1],['Palma',39.5696,2.6502,1],['Las Palmas',28.1235,-15.4363,0],['Bilbao',43.2630,-2.9350,1],['Alicante',38.3452,-0.4810,1],['Córdoba',37.8882,-4.7794,1],['Valladolid',41.6523,-4.7245,1],['Vigo',42.2406,-8.7207,1],['Gijón',43.5322,-5.6611,1],['Granada',37.1773,-3.5986,1],['A Coruña',43.3623,-8.4115,1],['Santa Cruz de Tenerife',28.4636,-16.2518,0],['Pamplona',42.8125,-1.6458,1],['Santander',43.4623,-3.8100,1],['San Sebastián',43.3183,-1.9812,1],['Salamanca',40.9701,-5.6635,1]]},
+  'Sweden':{tz:'Europe/Stockholm',dst:'eu',cities:[['Stockholm',59.3293,18.0686,1],['Gothenburg',57.7089,11.9746,1],['Malmö',55.6050,13.0038,1],['Uppsala',59.8586,17.6389,1],['Västerås',59.6162,16.5528,1],['Örebro',59.2741,15.2066,1],['Linköping',58.4109,15.6216,1],['Helsingborg',56.0465,12.6945,1],['Umeå',63.8258,20.2630,1],['Luleå',65.5848,22.1567,1]]},
+  'Switzerland':{tz:'Europe/Zurich',dst:'eu',cities:[['Zurich',47.3769,8.5417,1],['Geneva',46.2044,6.1432,1],['Basel',47.5596,7.5886,1],['Bern',46.9480,7.4474,1],['Lausanne',46.5197,6.6323,1],['Winterthur',47.5001,8.7241,1],['Lucerne',47.0502,8.3093,1],['St. Gallen',47.4245,9.3767,1],['Lugano',46.0037,8.9511,1]]},
+  'Ukraine':{tz:'Europe/Kyiv',dst:'eu',cities:[['Kyiv',50.4501,30.5234,2],['Kharkiv',49.9935,36.2304,2],['Odesa',46.4825,30.7233,2],['Dnipro',48.4647,35.0462,2],['Donetsk',48.0159,37.8029,2],['Zaporizhzhia',47.8388,35.1396,2],['Lviv',49.8397,24.0297,2],['Kryvyi Rih',47.9105,33.3918,2],['Mykolaiv',46.9750,31.9946,2],['Vinnytsia',49.2331,28.4682,2],['Chernivtsi',48.2921,25.9358,2],['Simferopol',44.9521,34.1024,2]]},
+  'United Kingdom':{tz:'Europe/London',dst:'eu',cities:[['London',51.5074,-0.1278,0],['Birmingham',52.4862,-1.8904,0],['Manchester',53.4808,-2.2426,0],['Glasgow',55.8642,-4.2518,0],['Liverpool',53.4084,-2.9916,0],['Edinburgh',55.9533,-3.1883,0],['Leeds',53.8008,-1.5491,0],['Bristol',51.4545,-2.5879,0],['Sheffield',53.3811,-1.4701,0],['Newcastle',54.9783,-1.6178,0],['Nottingham',52.9548,-1.1581,0],['Leicester',52.6369,-1.1398,0],['Cardiff',51.4816,-3.1791,0],['Belfast',54.5973,-5.9301,0],['Coventry',52.4068,-1.5197,0],['Bradford',53.7960,-1.7594,0],['Stoke-on-Trent',53.0027,-2.1794,0],['Southampton',50.9097,-1.4044,0],['Plymouth',50.3755,-4.1427,0],['Reading',51.4543,-0.9781,0],['Derby',52.9225,-1.4746,0],['Brighton',50.8225,-0.1372,0],['Aberdeen',57.1497,-2.0943,0],['Oxford',51.7520,-1.2577,0],['Cambridge',52.2053,0.1218,0],['York',53.9600,-1.0873,0],['Norwich',52.6309,1.2974,0],['Swansea',51.6214,-3.9436,0]]},
+  'Vatican City':{tz:'Europe/Vatican',dst:'eu',cities:[['Vatican City',41.9029,12.4534,1]]},
+
+  /* ---------------- ASIA ---------------- */
+  'Afghanistan':{tz:'Asia/Kabul',dst:'none',cities:[['Kabul',34.5553,69.2075,4.5],['Kandahar',31.6289,65.7372,4.5],['Herat',34.3529,62.2040,4.5],['Mazar-i-Sharif',36.7090,67.1109,4.5],['Jalalabad',34.4265,70.4515,4.5]]},
+  'Armenia':{tz:'Asia/Yerevan',dst:'none',cities:[['Yerevan',40.1792,44.4991,4],['Gyumri',40.7894,43.8475,4],['Vanadzor',40.8128,44.4883,4]]},
+  'Azerbaijan':{tz:'Asia/Baku',dst:'none',cities:[['Baku',40.4093,49.8671,4],['Ganja',40.6828,46.3606,4],['Sumqayit',40.5897,49.6686,4],['Mingachevir',40.7700,47.0489,4],['Nakhchivan',39.2089,45.4122,4]]},
+  'Bahrain':{tz:'Asia/Bahrain',dst:'none',cities:[['Manama',26.2285,50.5860,3],['Riffa',26.1300,50.5550,3],['Muharraq',26.2572,50.6119,3]]},
+  'Bangladesh':{tz:'Asia/Dhaka',dst:'none',cities:[['Dhaka',23.8103,90.4125,6],['Chittagong',22.3569,91.7832,6],['Khulna',22.8456,89.5403,6],['Rajshahi',24.3745,88.6042,6],['Sylhet',24.8949,91.8687,6],['Rangpur',25.7439,89.2752,6],['Barisal',22.7010,90.3535,6],['Comilla',23.4607,91.1809,6]]},
+  'Bhutan':{tz:'Asia/Thimphu',dst:'none',cities:[['Thimphu',27.4712,89.6339,6],['Paro',27.4287,89.4164,6]]},
+  'Brunei':{tz:'Asia/Brunei',dst:'none',cities:[['Bandar Seri Begawan',4.9031,114.9398,8]]},
+  'Cambodia':{tz:'Asia/Phnom_Penh',dst:'none',cities:[['Phnom Penh',11.5564,104.9282,7],['Siem Reap',13.3671,103.8448,7],['Battambang',13.0957,103.2022,7],['Sihanoukville',10.6270,103.5220,7]]},
+  'China':{tz:'Asia/Shanghai',dst:'cn',cities:[['Beijing',39.9042,116.4074,8],['Shanghai',31.2304,121.4737,8],['Guangzhou',23.1291,113.2644,8],['Shenzhen',22.5431,114.0579,8],['Chengdu',30.5728,104.0668,8],['Tianjin',39.3434,117.3616,8],['Wuhan',30.5928,114.3055,8],['Xi\'an',34.3416,108.9398,8],['Hangzhou',30.2741,120.1551,8],['Chongqing',29.5630,106.5516,8],['Nanjing',32.0603,118.7969,8],['Shenyang',41.8057,123.4315,8],['Qingdao',36.0671,120.3826,8],['Harbin',45.8038,126.5350,8],['Jinan',36.6512,117.1201,8],['Dalian',38.9140,121.6147,8],['Zhengzhou',34.7466,113.6254,8],['Changsha',28.2282,112.9388,8],['Kunming',25.0389,102.7183,8],['Xiamen',24.4798,118.0894,8],['Fuzhou',26.0745,119.2965,8],['Ürümqi',43.8256,87.6168,8],['Lhasa',29.6500,91.1000,8],['Suzhou',31.2989,120.5853,8]]},
+  'Georgia':{tz:'Asia/Tbilisi',dst:'none',cities:[['Tbilisi',41.7151,44.8271,4],['Batumi',41.6168,41.6367,4],['Kutaisi',42.2679,42.6946,4],['Rustavi',41.5495,45.0119,4]]},
+  'Hong Kong':{tz:'Asia/Hong_Kong',dst:'none',cities:[['Hong Kong',22.3193,114.1694,8],['Kowloon',22.3167,114.1833,8]]},
+  'India':{tz:'Asia/Kolkata',dst:'none',cities:[['Mumbai',19.0760,72.8777,5.5],['Delhi',28.7041,77.1025,5.5],['Bangalore',12.9716,77.5946,5.5],['Hyderabad',17.3850,78.4867,5.5],['Ahmedabad',23.0225,72.5714,5.5],['Chennai',13.0827,80.2707,5.5],['Kolkata',22.5726,88.3639,5.5],['Pune',18.5204,73.8567,5.5],['Jaipur',26.9124,75.7873,5.5],['Surat',21.1702,72.8311,5.5],['Lucknow',26.8467,80.9462,5.5],['Kanpur',26.4499,80.3319,5.5],['Nagpur',21.1458,79.0882,5.5],['Indore',22.7196,75.8577,5.5],['Bhopal',23.2599,77.4126,5.5],['Patna',25.5941,85.1376,5.5],['Vadodara',22.3072,73.1812,5.5],['Ludhiana',30.9010,75.8573,5.5],['Agra',27.1767,78.0081,5.5],['Nashik',19.9975,73.7898,5.5],['Varanasi',25.3176,82.9739,5.5],['Coimbatore',11.0168,76.9558,5.5],['Kochi',9.9312,76.2673,5.5],['Visakhapatnam',17.6868,83.2185,5.5],['Chandigarh',30.7333,76.7794,5.5],['Guwahati',26.1445,91.7362,5.5],['Amritsar',31.6340,74.8723,5.5],['Thiruvananthapuram',8.5241,76.9366,5.5],['Srinagar',34.0837,74.7973,5.5],['Bhubaneswar',20.2961,85.8245,5.5]]},
+  'Indonesia':{tz:'Asia/Jakarta',tzCity:{"Balikpapan":'Asia/Makassar',"Denpasar":'Asia/Makassar',"Jayapura":'Asia/Jayapura',"Makassar":'Asia/Makassar',"Manado":'Asia/Makassar',"Pontianak":'Asia/Pontianak'},dst:'none',cities:[['Jakarta',-6.2088,106.8456,7],['Surabaya',-7.2575,112.7521,7],['Bandung',-6.9175,107.6191,7],['Medan',3.5952,98.6722,7],['Semarang',-6.9932,110.4203,7],['Palembang',-2.9761,104.7754,7],['Makassar',-5.1477,119.4327,8],['Denpasar',-8.6500,115.2167,8],['Yogyakarta',-7.7956,110.3695,7],['Malang',-7.9666,112.6326,7],['Balikpapan',-1.2379,116.8529,8],['Pontianak',-0.0263,109.3425,7],['Manado',1.4748,124.8421,8],['Jayapura',-2.5337,140.7181,9]]},
+  'Iran':{tz:'Asia/Tehran',dst:'ir',cities:[['Tehran',35.6892,51.3890,3.5],['Mashhad',36.2605,59.6168,3.5],['Isfahan',32.6546,51.6680,3.5],['Karaj',35.8400,50.9391,3.5],['Shiraz',29.5918,52.5837,3.5],['Tabriz',38.0962,46.2738,3.5],['Qom',34.6416,50.8746,3.5],['Ahvaz',31.3183,48.6706,3.5],['Kermanshah',34.3277,47.0778,3.5],['Urmia',37.5527,45.0761,3.5],['Rasht',37.2808,49.5832,3.5],['Yazd',31.8974,54.3569,3.5],['Kerman',30.2839,57.0834,3.5]]},
+  'Iraq':{tz:'Asia/Baghdad',dst:'none',cities:[['Baghdad',33.3152,44.3661,3],['Basra',30.5085,47.7804,3],['Mosul',36.3350,43.1189,3],['Erbil',36.1911,44.0092,3],['Najaf',32.0000,44.3333,3],['Karbala',32.6160,44.0249,3],['Kirkuk',35.4681,44.3922,3],['Sulaymaniyah',35.5650,45.4329,3]]},
+  'Israel':{tz:'Asia/Jerusalem',dst:'il',cities:[['Jerusalem',31.7683,35.2137,2],['Tel Aviv',32.0853,34.7818,2],['Haifa',32.7940,34.9896,2],['Rishon LeZion',31.9730,34.7925,2],['Beersheba',31.2530,34.7915,2],['Netanya',32.3215,34.8532,2],['Ashdod',31.8044,34.6553,2],['Eilat',29.5577,34.9519,2]]},
+  'Japan':{tz:'Asia/Tokyo',dst:'none',cities:[['Tokyo',35.6762,139.6503,9],['Yokohama',35.4437,139.6380,9],['Osaka',34.6937,135.5023,9],['Nagoya',35.1815,136.9066,9],['Sapporo',43.0618,141.3545,9],['Fukuoka',33.5904,130.4017,9],['Kobe',34.6901,135.1955,9],['Kyoto',35.0116,135.7681,9],['Kawasaki',35.5308,139.7029,9],['Saitama',35.8617,139.6455,9],['Hiroshima',34.3853,132.4553,9],['Sendai',38.2682,140.8694,9],['Chiba',35.6074,140.1065,9],['Kitakyushu',33.8834,130.8752,9],['Niigata',37.9026,139.0234,9],['Kumamoto',32.8032,130.7079,9],['Okinawa',26.3344,127.8056,9],['Kanazawa',36.5613,136.6562,9]]},
+  'Jordan':{tz:'Asia/Amman',dst:'eu',cities:[['Amman',31.9454,35.9284,2],['Zarqa',32.0728,36.0876,2],['Irbid',32.5556,35.8500,2],['Aqaba',29.5321,35.0063,2]]},
+  'Kazakhstan':{tz:'Asia/Almaty',tzCity:{"Aktobe":'Asia/Aqtobe',"Atyrau":'Asia/Atyrau'},dst:'none',cities:[['Almaty',43.2220,76.8512,6],['Astana',51.1605,71.4704,6],['Shymkent',42.3417,69.5901,6],['Karaganda',49.8047,73.1094,6],['Aktobe',50.2839,57.1670,5],['Atyrau',47.0945,51.9238,5],['Pavlodar',52.2873,76.9674,6],['Oskemen',49.9484,82.6279,6]]},
+  'Kuwait':{tz:'Asia/Kuwait',dst:'none',cities:[['Kuwait City',29.3759,47.9774,3],['Al Ahmadi',29.0769,48.0838,3],['Hawalli',29.3328,48.0289,3]]},
+  'Kyrgyzstan':{tz:'Asia/Bishkek',dst:'none',cities:[['Bishkek',42.8746,74.5698,6],['Osh',40.5283,72.7985,6],['Jalal-Abad',40.9333,73.0000,6]]},
+  'Laos':{tz:'Asia/Vientiane',dst:'none',cities:[['Vientiane',17.9757,102.6331,7],['Luang Prabang',19.8834,102.1347,7],['Pakse',15.1202,105.7988,7]]},
+  'Lebanon':{tz:'Asia/Beirut',dst:'eu',cities:[['Beirut',33.8938,35.5018,2],['Tripoli',34.4367,35.8497,2],['Sidon',33.5571,35.3729,2],['Tyre',33.2705,35.2038,2],['Zahlé',33.8463,35.9019,2]]},
+  'Macau':{tz:'Asia/Macau',dst:'none',cities:[['Macau',22.1987,113.5439,8]]},
+  'Malaysia':{tz:'Asia/Kuala_Lumpur',dst:'none',cities:[['Kuala Lumpur',3.1390,101.6869,8],['George Town',5.4141,100.3288,8],['Ipoh',4.5975,101.0901,8],['Johor Bahru',1.4927,103.7414,8],['Malacca City',2.1896,102.2501,8],['Kota Kinabalu',5.9804,116.0735,8],['Kuching',1.5535,110.3593,8],['Shah Alam',3.0733,101.5185,8]]},
+  'Maldives':{tz:'Indian/Maldives',dst:'none',cities:[['Malé',4.1755,73.5093,5]]},
+  'Mongolia':{tz:'Asia/Ulaanbaatar',dst:'none',cities:[['Ulaanbaatar',47.8864,106.9057,8],['Erdenet',49.0347,104.0836,8],['Darkhan',49.4867,105.9228,8]]},
+  'Myanmar':{tz:'Asia/Yangon',dst:'none',cities:[['Yangon',16.8661,96.1951,6.5],['Mandalay',21.9588,96.0891,6.5],['Naypyidaw',19.7633,96.0785,6.5],['Bago',17.3350,96.4797,6.5]]},
+  'Nepal':{tz:'Asia/Kathmandu',dst:'none',cities:[['Kathmandu',27.7172,85.3240,5.75],['Pokhara',28.2096,83.9856,5.75],['Lalitpur',27.6644,85.3188,5.75],['Biratnagar',26.4525,87.2718,5.75]]},
+  'North Korea':{tz:'Asia/Pyongyang',dst:'none',cities:[['Pyongyang',39.0392,125.7625,9],['Hamhung',39.9183,127.5361,9],['Chongjin',41.7956,129.7756,9]]},
+  'Oman':{tz:'Asia/Muscat',dst:'none',cities:[['Muscat',23.5880,58.3829,4],['Salalah',17.0151,54.0924,4],['Sohar',24.3467,56.7089,4],['Nizwa',22.9333,57.5333,4]]},
+  'Pakistan':{tz:'Asia/Karachi',dst:'none',cities:[['Karachi',24.8607,67.0011,5],['Lahore',31.5204,74.3587,5],['Faisalabad',31.4504,73.1350,5],['Rawalpindi',33.5651,73.0169,5],['Multan',30.1575,71.5249,5],['Islamabad',33.6844,73.0479,5],['Peshawar',34.0151,71.5249,5],['Quetta',30.1798,66.9750,5],['Sialkot',32.4945,74.5229,5],['Hyderabad',25.3960,68.3578,5],['Gujranwala',32.1877,74.1945,5]]},
+  'Palestine':{tz:'Asia/Gaza',dst:'eu',cities:[['Gaza',31.5017,34.4668,2],['Hebron',31.5326,35.0998,2],['Nablus',32.2211,35.2544,2],['Ramallah',31.9038,35.2034,2],['Bethlehem',31.7054,35.2024,2]]},
+  'Philippines':{tz:'Asia/Manila',dst:'none',cities:[['Manila',14.5995,120.9842,8],['Quezon City',14.6760,121.0437,8],['Davao City',7.1907,125.4553,8],['Cebu City',10.3157,123.8854,8],['Zamboanga City',6.9214,122.0790,8],['Cagayan de Oro',8.4542,124.6319,8],['Bacolod',10.6407,122.9689,8],['Iloilo City',10.7202,122.5621,8],['Baguio',16.4023,120.5960,8]]},
+  'Qatar':{tz:'Asia/Qatar',dst:'none',cities:[['Doha',25.2854,51.5310,3],['Al Rayyan',25.2919,51.4244,3],['Al Wakrah',25.1659,51.6033,3]]},
+  'Saudi Arabia':{tz:'Asia/Riyadh',dst:'none',cities:[['Riyadh',24.7136,46.6753,3],['Jeddah',21.4858,39.1925,3],['Mecca',21.3891,39.8579,3],['Medina',24.5247,39.5692,3],['Dammam',26.3927,49.9777,3],['Taif',21.2703,40.4158,3],['Tabuk',28.3835,36.5662,3],['Buraydah',26.3260,43.9750,3],['Khobar',26.2172,50.1971,3],['Abha',18.2164,42.5053,3]]},
+  'Singapore':{tz:'Asia/Singapore',dst:'none',cities:[['Singapore',1.3521,103.8198,8]]},
+  'South Korea':{tz:'Asia/Seoul',dst:'none',cities:[['Seoul',37.5665,126.9780,9],['Busan',35.1796,129.0756,9],['Incheon',37.4563,126.7052,9],['Daegu',35.8714,128.6014,9],['Daejeon',36.3504,127.3845,9],['Gwangju',35.1595,126.8526,9],['Suwon',37.2636,127.0286,9],['Ulsan',35.5384,129.3114,9],['Jeju',33.4996,126.5312,9],['Changwon',35.2280,128.6811,9]]},
+  'Sri Lanka':{tz:'Asia/Colombo',dst:'none',cities:[['Colombo',6.9271,79.8612,5.5],['Kandy',7.2906,80.6337,5.5],['Galle',6.0535,80.2210,5.5],['Jaffna',9.6615,80.0255,5.5],['Negombo',7.2083,79.8358,5.5]]},
+  'Syria':{tz:'Asia/Damascus',dst:'eu',cities:[['Damascus',33.5138,36.2765,2],['Aleppo',36.2021,37.1343,2],['Homs',34.7324,36.7137,2],['Latakia',35.5317,35.7915,2],['Hama',35.1318,36.7578,2],['Deir ez-Zor',35.3359,40.1408,2]]},
+  'Taiwan':{tz:'Asia/Taipei',dst:'none',cities:[['Taipei',25.0330,121.5654,8],['Kaohsiung',22.6273,120.3014,8],['Taichung',24.1477,120.6736,8],['Tainan',22.9999,120.2269,8],['Hsinchu',24.8138,120.9675,8],['Keelung',25.1276,121.7392,8]]},
+  'Tajikistan':{tz:'Asia/Dushanbe',dst:'none',cities:[['Dushanbe',38.5598,68.7870,5],['Khujand',40.2833,69.6333,5],['Kulob',37.9092,69.7822,5]]},
+  'Thailand':{tz:'Asia/Bangkok',dst:'none',cities:[['Bangkok',13.7563,100.5018,7],['Chiang Mai',18.7883,98.9853,7],['Nonthaburi',13.8621,100.5144,7],['Hat Yai',7.0086,100.4747,7],['Nakhon Ratchasima',14.9799,102.0977,7],['Pattaya',12.9236,100.8825,7],['Phuket',7.8804,98.3923,7],['Udon Thani',17.4138,102.7870,7],['Khon Kaen',16.4419,102.8360,7]]},
+  'Timor-Leste':{tz:'Asia/Dili',dst:'none',cities:[['Dili',-8.5569,125.5603,9]]},
+  'Turkey':{tz:'Europe/Istanbul',dst:'tr',cities:[
+    ['Istanbul',41.0082,28.9784,2],['Ankara',39.9334,32.8597,2],['Izmir',38.4237,27.1428,2],
+    ['Bursa',40.1885,29.0610,2],['Antalya',36.8969,30.7133,2],['Adana',37.0000,35.3213,2],
+    ['Konya',37.8746,32.4932,2],['Gaziantep',37.0662,37.3833,2],['Şanlıurfa',37.1591,38.7969,2],
+    ['Kocaeli',40.8533,29.8815,2],['Mersin',36.8121,34.6415,2],['Diyarbakır',37.9144,40.2306,2],
+    ['Hatay',36.2025,36.1606,2],['Manisa',38.6191,27.4289,2],['Kayseri',38.7312,35.4787,2],
+    ['Samsun',41.2867,36.3300,2],['Balıkesir',39.6484,27.8826,2],['Kahramanmaraş',37.5858,36.9371,2],
+    ['Van',38.4891,43.4089,2],['Aydın',37.8560,27.8416,2],['Denizli',37.7765,29.0864,2],
+    ['Sakarya',40.7569,30.3783,2],['Tekirdağ',40.9781,27.5117,2],['Muğla',37.2153,28.3636,2],
+    ['Eskişehir',39.7767,30.5206,2],['Mardin',37.3212,40.7245,2],['Malatya',38.3552,38.3095,2],
+    ['Trabzon',41.0027,39.7168,2],['Erzurum',39.9000,41.2700,2],['Ordu',40.9839,37.8764,2],
+    ['Afyonkarahisar',38.7507,30.5567,2],['Sivas',39.7477,37.0179,2],['Adıyaman',37.7648,38.2786,2],
+    ['Batman',37.8812,41.1351,2],['Elazığ',38.6810,39.2264,2],['Tokat',40.3167,36.5544,2],
+    ['Zonguldak',41.4564,31.7987,2],['Kütahya',39.4242,29.9833,2],['Çorum',40.5506,34.9556,2],
+    ['Osmaniye',37.0742,36.2464,2],['Şırnak',37.5164,42.4611,2],['Çanakkale',40.1553,26.4142,2],
+    ['Ağrı',39.7191,43.0503,2],['Giresun',40.9128,38.3895,2],['Isparta',37.7648,30.5566,2],
+    ['Aksaray',38.3687,34.0370,2],['Yozgat',39.8181,34.8147,2],['Edirne',41.6771,26.5557,2],
+    ['Düzce',40.8438,31.1565,2],['Muş',38.9462,41.7539,2],['Kastamonu',41.3887,33.7827,2],
+    ['Uşak',38.6823,29.4082,2],['Kırşehir',39.1425,34.1709,2],['Niğde',37.9667,34.6833,2],
+    ['Rize',41.0201,40.5234,2],['Amasya',40.6499,35.8353,2],['Bolu',40.7392,31.6089,2],
+    ['Nevşehir',38.6939,34.6857,2],['Bitlis',38.4006,42.1095,2],['Siirt',37.9333,41.9500,2],
+    ['Karaman',37.1811,33.2150,2],['Yalova',40.6550,29.2769,2],['Kars',40.6167,43.1000,2],
+    ['Karabük',41.2061,32.6204,2],['Kırıkkale',39.8468,33.5153,2],['Bingöl',38.8847,40.4986,2],
+    ['Burdur',37.7203,30.2908,2],['Sinop',42.0231,35.1531,2],['Hakkari',37.5744,43.7408,2],
+    ['Kırklareli',41.7355,27.2244,2],['Bilecik',40.1506,29.9792,2],['Erzincan',39.7500,39.5000,2],
+    ['Bartın',41.6344,32.3375,2],['Iğdır',39.9167,44.0333,2],['Artvin',41.1828,41.8194,2],
+    ['Çankırı',40.6013,33.6134,2],['Kilis',36.7184,37.1212,2],['Gümüşhane',40.4386,39.5086,2],
+    ['Ardahan',41.1105,42.7022,2],['Tunceli',39.1079,39.5401,2],['Bayburt',40.2552,40.2249,2]]},
+  'Turkmenistan':{tz:'Asia/Ashgabat',dst:'none',cities:[['Ashgabat',37.9601,58.3261,5],['Türkmenabat',39.0733,63.5786,5],['Daşoguz',41.8362,59.9666,5]]},
+  'United Arab Emirates':{tz:'Asia/Dubai',dst:'none',cities:[['Dubai',25.2048,55.2708,4],['Abu Dhabi',24.4539,54.3773,4],['Sharjah',25.3463,55.4209,4],['Al Ain',24.2075,55.7447,4],['Ajman',25.4052,55.5136,4],['Ras Al Khaimah',25.7895,55.9432,4],['Fujairah',25.1288,56.3265,4]]},
+  'Uzbekistan':{tz:'Asia/Tashkent',dst:'none',cities:[['Tashkent',41.2995,69.2401,5],['Samarkand',39.6270,66.9750,5],['Namangan',40.9983,71.6726,5],['Andijan',40.7821,72.3442,5],['Bukhara',39.7747,64.4286,5],['Nukus',42.4531,59.6103,5],['Fergana',40.3864,71.7864,5]]},
+  'Vietnam':{tz:'Asia/Ho_Chi_Minh',dst:'none',cities:[['Ho Chi Minh City',10.8231,106.6297,7],['Hanoi',21.0285,105.8542,7],['Da Nang',16.0545,108.2022,7],['Hai Phong',20.8449,106.6881,7],['Can Tho',10.0452,105.7469,7],['Bien Hoa',10.9447,106.8243,7],['Nha Trang',12.2388,109.1967,7],['Hue',16.4637,107.5909,7],['Vung Tau',10.3460,107.0843,7]]},
+  'Yemen':{tz:'Asia/Aden',dst:'none',cities:[["Sana'a",15.3694,44.1910,3],['Aden',12.7855,45.0187,3],['Taiz',13.5789,44.0219,3],['Hodeidah',14.7978,42.9545,3],['Mukalla',14.5426,49.1242,3]]},
+
+  /* ---------------- AFRICA ---------------- */
+  'Algeria':{tz:'Africa/Algiers',dst:'none',cities:[['Algiers',36.7538,3.0588,1],['Oran',35.6976,-0.6337,1],['Constantine',36.3650,6.6147,1],['Annaba',36.9000,7.7667,1],['Batna',35.5559,6.1741,1],['Blida',36.4703,2.8277,1],['Sétif',36.1898,5.4108,1],['Tlemcen',34.8828,-1.3167,1]]},
+  'Angola':{tz:'Africa/Luanda',dst:'none',cities:[['Luanda',-8.8390,13.2894,1],['Huambo',-12.7761,15.7392,1],['Lobito',-12.3644,13.5361,1],['Benguela',-12.5763,13.4055,1],['Lubango',-14.9177,13.4925,1]]},
+  'Benin':{tz:'Africa/Porto-Novo',dst:'none',cities:[['Cotonou',6.3703,2.3912,1],['Porto-Novo',6.4969,2.6289,1],['Parakou',9.3372,2.6303,1]]},
+  'Botswana':{tz:'Africa/Gaborone',dst:'none',cities:[['Gaborone',-24.6282,25.9231,2],['Francistown',-21.1670,27.5077,2],['Maun',-19.9833,23.4167,2]]},
+  'Burkina Faso':{tz:'Africa/Ouagadougou',dst:'none',cities:[['Ouagadougou',12.3714,-1.5197,0],['Bobo-Dioulasso',11.1771,-4.2979,0],['Koudougou',12.2530,-2.3622,0]]},
+  'Burundi':{tz:'Africa/Bujumbura',dst:'none',cities:[['Bujumbura',-3.3614,29.3599,2],['Gitega',-3.4271,29.9246,2]]},
+  'Cameroon':{tz:'Africa/Douala',dst:'none',cities:[['Douala',4.0511,9.7679,1],['Yaoundé',3.8480,11.5021,1],['Garoua',9.3017,13.3921,1],['Bamenda',5.9631,10.1591,1],['Bafoussam',5.4737,10.4179,1]]},
+  'Cape Verde':{tz:'Atlantic/Cape_Verde',dst:'none',cities:[['Praia',14.9330,-23.5133,-1],['Mindelo',16.8901,-24.9804,-1]]},
+  'Central African Republic':{tz:'Africa/Bangui',dst:'none',cities:[['Bangui',4.3947,18.5582,1],['Bimbo',4.2558,18.4161,1]]},
+  'Chad':{tz:'Africa/Ndjamena',dst:'none',cities:[["N'Djamena",12.1348,15.0557,1],['Moundou',8.5667,16.0833,1],['Sarh',9.1500,18.3833,1]]},
+  'Comoros':{tz:'Indian/Comoro',dst:'none',cities:[['Moroni',-11.7172,43.2473,3]]},
+  'Democratic Republic of the Congo':{tz:'Africa/Lubumbashi',tzCity:{"Kinshasa":'Africa/Kinshasa'},dst:'none',cities:[['Kinshasa',-4.4419,15.2663,1],['Lubumbashi',-11.6876,27.5026,2],['Mbuji-Mayi',-6.1360,23.5898,2],['Kisangani',0.5153,25.1911,2],['Goma',-1.6792,29.2228,2],['Bukavu',-2.5083,28.8608,2]]},
+  'Republic of the Congo':{tz:'Africa/Brazzaville',dst:'none',cities:[['Brazzaville',-4.2634,15.2429,1],['Pointe-Noire',-4.7761,11.8664,1]]},
+  'Djibouti':{tz:'Africa/Djibouti',dst:'none',cities:[['Djibouti City',11.5721,43.1456,3]]},
+  'Egypt':{tz:'Africa/Cairo',dst:'eg',cities:[['Cairo',30.0444,31.2357,2],['Alexandria',31.2001,29.9187,2],['Giza',30.0131,31.2089,2],['Shubra El Kheima',30.1286,31.2422,2],['Port Said',31.2653,32.3019,2],['Suez',29.9668,32.5498,2],['Luxor',25.6872,32.6396,2],['Aswan',24.0889,32.8998,2],['Mansoura',31.0409,31.3785,2],['Tanta',30.7865,31.0004,2],['Hurghada',27.2579,33.8116,2],['Ismailia',30.5965,32.2715,2]]},
+  'Equatorial Guinea':{tz:'Africa/Malabo',dst:'none',cities:[['Malabo',3.7523,8.7742,1],['Bata',1.8639,9.7658,1]]},
+  'Eritrea':{tz:'Africa/Asmara',dst:'none',cities:[['Asmara',15.3229,38.9251,3],['Massawa',15.6086,39.4497,3]]},
+  'Eswatini':{tz:'Africa/Mbabane',dst:'none',cities:[['Mbabane',-26.3054,31.1367,2],['Manzini',-26.4833,31.3667,2]]},
+  'Ethiopia':{tz:'Africa/Addis_Ababa',dst:'none',cities:[['Addis Ababa',9.0320,38.7469,3],['Dire Dawa',9.5931,41.8661,3],['Mekelle',13.4967,39.4753,3],['Gondar',12.6030,37.4521,3],['Bahir Dar',11.5936,37.3908,3],['Hawassa',7.0621,38.4764,3]]},
+  'Gabon':{tz:'Africa/Libreville',dst:'none',cities:[['Libreville',0.4162,9.4673,1],['Port-Gentil',-0.7193,8.7815,1]]},
+  'Gambia':{tz:'Africa/Banjul',dst:'none',cities:[['Banjul',13.4549,-16.5790,0],['Serekunda',13.4383,-16.6781,0]]},
+  'Ghana':{tz:'Africa/Accra',dst:'none',cities:[['Accra',5.6037,-0.1870,0],['Kumasi',6.6885,-1.6244,0],['Tamale',9.4008,-0.8393,0],['Sekondi-Takoradi',4.9340,-1.7137,0],['Cape Coast',5.1315,-1.2795,0]]},
+  'Guinea':{tz:'Africa/Conakry',dst:'none',cities:[['Conakry',9.6412,-13.5784,0],['Kankan',10.3854,-9.3057,0],['Nzérékoré',7.7562,-8.8179,0]]},
+  'Guinea-Bissau':{tz:'Africa/Bissau',dst:'none',cities:[['Bissau',11.8817,-15.6178,0]]},
+  'Ivory Coast':{tz:'Africa/Abidjan',dst:'none',cities:[['Abidjan',5.3600,-4.0083,0],['Yamoussoukro',6.8276,-5.2893,0],['Bouaké',7.6906,-5.0300,0],['Daloa',6.8770,-6.4502,0],['San-Pédro',4.7485,-6.6363,0]]},
+  'Kenya':{tz:'Africa/Nairobi',dst:'none',cities:[['Nairobi',-1.2921,36.8219,3],['Mombasa',-4.0435,39.6682,3],['Kisumu',-0.0917,34.7680,3],['Nakuru',-0.3031,36.0800,3],['Eldoret',0.5143,35.2698,3],['Thika',-1.0333,37.0693,3]]},
+  'Lesotho':{tz:'Africa/Maseru',dst:'none',cities:[['Maseru',-29.3151,27.4869,2]]},
+  'Liberia':{tz:'Africa/Monrovia',dst:'none',cities:[['Monrovia',6.2907,-10.7605,0],['Gbarnga',6.9956,-9.4722,0]]},
+  'Libya':{tz:'Africa/Tripoli',dst:'none',cities:[['Tripoli',32.8872,13.1913,2],['Benghazi',32.1167,20.0667,2],['Misrata',32.3754,15.0925,2],['Sabha',27.0377,14.4283,2]]},
+  'Madagascar':{tz:'Indian/Antananarivo',dst:'none',cities:[['Antananarivo',-18.8792,47.5079,3],['Toamasina',-18.1492,49.4023,3],['Antsirabe',-19.8659,47.0333,3],['Mahajanga',-15.7167,46.3167,3],['Fianarantsoa',-21.4536,47.0854,3]]},
+  'Malawi':{tz:'Africa/Blantyre',dst:'none',cities:[['Lilongwe',-13.9626,33.7741,2],['Blantyre',-15.7861,35.0058,2],['Mzuzu',-11.4656,34.0207,2]]},
+  'Mali':{tz:'Africa/Bamako',dst:'none',cities:[['Bamako',12.6392,-8.0029,0],['Sikasso',11.3176,-5.6665,0],['Mopti',14.4843,-4.1826,0],['Timbuktu',16.7735,-3.0074,0]]},
+  'Mauritania':{tz:'Africa/Nouakchott',dst:'none',cities:[['Nouakchott',18.0735,-15.9582,0],['Nouadhibou',20.9410,-17.0347,0]]},
+  'Mauritius':{tz:'Indian/Mauritius',dst:'none',cities:[['Port Louis',-20.1609,57.5012,4],['Curepipe',-20.3183,57.5261,4]]},
+  'Morocco':{tz:'Africa/Casablanca',dst:'none',cities:[['Casablanca',33.5731,-7.5898,0],['Rabat',34.0209,-6.8416,0],['Fes',34.0181,-5.0078,0],['Marrakesh',31.6295,-7.9811,0],['Tangier',35.7595,-5.8340,0],['Agadir',30.4278,-9.5981,0],['Meknes',33.8935,-5.5473,0],['Oujda',34.6867,-1.9114,0],['Kenitra',34.2610,-6.5802,0],['Tetouan',35.5785,-5.3684,0]]},
+  'Mozambique':{tz:'Africa/Maputo',dst:'none',cities:[['Maputo',-25.9692,32.5732,2],['Matola',-25.9622,32.4589,2],['Beira',-19.8436,34.8389,2],['Nampula',-15.1165,39.2666,2],['Quelimane',-17.8786,36.8883,2]]},
+  'Namibia':{tz:'Africa/Windhoek',dst:'none',cities:[['Windhoek',-22.5609,17.0658,2],['Walvis Bay',-22.9576,14.5053,2],['Swakopmund',-22.6784,14.5258,2]]},
+  'Niger':{tz:'Africa/Niamey',dst:'none',cities:[['Niamey',13.5127,2.1128,1],['Zinder',13.8053,8.9881,1],['Maradi',13.5000,7.1017,1]]},
+  'Nigeria':{tz:'Africa/Lagos',dst:'none',cities:[['Lagos',6.5244,3.3792,1],['Kano',12.0022,8.5920,1],['Ibadan',7.3775,3.9470,1],['Abuja',9.0765,7.3986,1],['Port Harcourt',4.8156,7.0498,1],['Benin City',6.3350,5.6037,1],['Kaduna',10.5222,7.4383,1],['Maiduguri',11.8311,13.1510,1],['Zaria',11.0855,7.7199,1],['Aba',5.1167,7.3667,1],['Jos',9.8965,8.8583,1],['Ilorin',8.4966,4.5421,1],['Enugu',6.5244,7.5186,1],['Onitsha',6.1667,6.7833,1],['Abeokuta',7.1557,3.3451,1]]},
+  'Rwanda':{tz:'Africa/Kigali',dst:'none',cities:[['Kigali',-1.9441,30.0619,2],['Butare',-2.5967,29.7394,2]]},
+  'Sao Tome and Principe':{tz:'Africa/Sao_Tome',dst:'none',cities:[['São Tomé',0.3365,6.7273,0]]},
+  'Senegal':{tz:'Africa/Dakar',dst:'none',cities:[['Dakar',14.7167,-17.4677,0],['Touba',14.8500,-15.8833,0],['Thiès',14.7910,-16.9359,0],['Saint-Louis',16.0179,-16.4896,0]]},
+  'Seychelles':{tz:'Indian/Mahe',dst:'none',cities:[['Victoria',-4.6191,55.4513,4]]},
+  'Sierra Leone':{tz:'Africa/Freetown',dst:'none',cities:[['Freetown',8.4657,-13.2317,0],['Bo',7.9647,-11.7383,0],['Kenema',7.8767,-11.1875,0]]},
+  'Somalia':{tz:'Africa/Mogadishu',dst:'none',cities:[['Mogadishu',2.0469,45.3182,3],['Hargeisa',9.5600,44.0650,3],['Bosaso',11.2842,49.1816,3],['Kismayo',-0.3582,42.5454,3]]},
+  'South Africa':{tz:'Africa/Johannesburg',dst:'none',cities:[['Johannesburg',-26.2041,28.0473,2],['Cape Town',-33.9249,18.4241,2],['Durban',-29.8587,31.0218,2],['Pretoria',-25.7479,28.2293,2],['Port Elizabeth',-33.9608,25.6022,2],['Bloemfontein',-29.0852,26.1596,2],['East London',-33.0292,27.8546,2],['Pietermaritzburg',-29.6006,30.3794,2],['Soweto',-26.2678,27.8585,2],['Kimberley',-28.7282,24.7499,2],['Polokwane',-23.9045,29.4689,2],['Nelspruit',-25.4753,30.9694,2]]},
+  'South Sudan':{tz:'Africa/Juba',dst:'none',cities:[['Juba',4.8594,31.5713,2],['Malakal',9.5334,31.6605,2],['Wau',7.7029,27.9898,2]]},
+  'Sudan':{tz:'Africa/Khartoum',dst:'none',cities:[['Khartoum',15.5007,32.5599,2],['Omdurman',15.6445,32.4777,2],['Port Sudan',19.6158,37.2164,2],['Kassala',15.4510,36.4000,2],['Nyala',12.0489,24.8807,2]]},
+  'Tanzania':{tz:'Africa/Dar_es_Salaam',dst:'none',cities:[['Dar es Salaam',-6.7924,39.2083,3],['Mwanza',-2.5164,32.9175,3],['Arusha',-3.3869,36.6830,3],['Dodoma',-6.1630,35.7516,3],['Zanzibar City',-6.1659,39.2026,3],['Mbeya',-8.9000,33.4500,3]]},
+  'Togo':{tz:'Africa/Lome',dst:'none',cities:[['Lomé',6.1256,1.2254,0],['Sokodé',8.9833,1.1333,0]]},
+  'Tunisia':{tz:'Africa/Tunis',dst:'none',cities:[['Tunis',36.8065,10.1815,1],['Sfax',34.7406,10.7603,1],['Sousse',35.8256,10.6084,1],['Kairouan',35.6781,10.0963,1],['Bizerte',37.2744,9.8739,1],['Gabès',33.8815,10.0982,1]]},
+  'Uganda':{tz:'Africa/Kampala',dst:'none',cities:[['Kampala',0.3476,32.5825,3],['Gulu',2.7746,32.2990,3],['Mbarara',-0.6072,30.6545,3],['Jinja',0.4244,33.2041,3]]},
+  'Zambia':{tz:'Africa/Lusaka',dst:'none',cities:[['Lusaka',-15.3875,28.3228,2],['Kitwe',-12.8024,28.2132,2],['Ndola',-12.9587,28.6366,2],['Livingstone',-17.8419,25.8544,2]]},
+  'Zimbabwe':{tz:'Africa/Harare',dst:'none',cities:[['Harare',-17.8252,31.0335,2],['Bulawayo',-20.1325,28.6265,2],['Mutare',-18.9707,32.6709,2],['Gweru',-19.4500,29.8167,2]]},
+
+  /* ---------------- AMERICAS ---------------- */
+  'Antigua and Barbuda':{tz:'America/Antigua',dst:'none',cities:[["St. John's",17.1274,-61.8468,-4]]},
+  'Argentina':{tz:'America/Buenos_Aires',dst:'none',cities:[['Buenos Aires',-34.6037,-58.3816,-3],['Córdoba',-31.4201,-64.1888,-3],['Rosario',-32.9442,-60.6505,-3],['Mendoza',-32.8895,-68.8458,-3],['La Plata',-34.9215,-57.9545,-3],['Tucumán',-26.8083,-65.2176,-3],['Mar del Plata',-38.0055,-57.5426,-3],['Salta',-24.7821,-65.4232,-3],['Santa Fe',-31.6333,-60.7000,-3],['Bariloche',-41.1335,-71.3103,-3],['Neuquén',-38.9516,-68.0591,-3],['Ushuaia',-54.8019,-68.3030,-3]]},
+  'Bahamas':{tz:'America/Nassau',dst:'us',cities:[['Nassau',25.0443,-77.3504,-5],['Freeport',26.5333,-78.7000,-5]]},
+  'Barbados':{tz:'America/Barbados',dst:'none',cities:[['Bridgetown',13.1132,-59.5988,-4]]},
+  'Belize':{tz:'America/Belize',dst:'none',cities:[['Belize City',17.5046,-88.1962,-6],['Belmopan',17.2510,-88.7590,-6]]},
+  'Bolivia':{tz:'America/La_Paz',dst:'none',cities:[['La Paz',-16.4897,-68.1193,-4],['Santa Cruz',-17.7833,-63.1821,-4],['Cochabamba',-17.3895,-66.1568,-4],['Sucre',-19.0196,-65.2619,-4],['Oruro',-17.9833,-67.1500,-4],['Potosí',-19.5836,-65.7531,-4]]},
+  'Brazil':{tz:'America/Sao_Paulo',tzCity:{"Bel\u00e9m":'America/Belem',"Campo Grande":'America/Campo_Grande',"Cuiab\u00e1":'America/Cuiaba',"Fortaleza":'America/Fortaleza',"Jo\u00e3o Pessoa":'America/Fortaleza',"Macei\u00f3":'America/Maceio',"Manaus":'America/Manaus',"Natal":'America/Fortaleza',"Recife":'America/Recife',"Salvador":'America/Fortaleza',"S\u00e3o Lu\u00eds":'America/Fortaleza',"Teresina":'America/Fortaleza'},dst:'br',cities:[['São Paulo',-23.5505,-46.6333,-3],['Rio de Janeiro',-22.9068,-43.1729,-3],['Brasília',-15.7942,-47.8822,-3],['Salvador',-12.9777,-38.5016,-3,'none'],['Fortaleza',-3.7319,-38.5267,-3,'none'],['Belo Horizonte',-19.9167,-43.9345,-3],['Manaus',-3.1190,-60.0217,-4,'none'],['Curitiba',-25.4284,-49.2733,-3],['Recife',-8.0476,-34.8770,-3,'none'],['Porto Alegre',-30.0346,-51.2177,-3],['Belém',-1.4558,-48.5039,-3,'none'],['Goiânia',-16.6869,-49.2648,-3],['Guarulhos',-23.4538,-46.5333,-3],['Campinas',-22.9099,-47.0626,-3],['São Luís',-2.5297,-44.3028,-3,'none'],['Maceió',-9.6658,-35.7353,-3,'none'],['Natal',-5.7945,-35.2110,-3,'none'],['Campo Grande',-20.4697,-54.6201,-4],['Teresina',-5.0892,-42.8019,-3,'none'],['João Pessoa',-7.1195,-34.8450,-3,'none'],['Florianópolis',-27.5954,-48.5480,-3],['Cuiabá',-15.6014,-56.0979,-4],['Santos',-23.9608,-46.3336,-3],['Vitória',-20.3155,-40.3128,-3]]},
+  'Canada':{tz:'America/Toronto',tzCity:{"Calgary":'America/Edmonton',"Edmonton":'America/Edmonton',"Halifax":'America/Halifax',"Regina":'America/Regina',"Saskatoon":'America/Regina',"St. John's":'America/St_Johns',"Vancouver":'America/Vancouver',"Victoria":'America/Vancouver',"Whitehorse":'America/Whitehorse',"Winnipeg":'America/Winnipeg'},dst:'us',cities:[['Toronto',43.6532,-79.3832,-5],['Montreal',45.5017,-73.5673,-5],['Vancouver',49.2827,-123.1207,-8],['Calgary',51.0447,-114.0719,-7],['Edmonton',53.5461,-113.4938,-7],['Ottawa',45.4215,-75.6972,-5],['Winnipeg',49.8951,-97.1384,-6],['Quebec City',46.8139,-71.2080,-5],['Hamilton',43.2557,-79.8711,-5],['Halifax',44.6488,-63.5752,-4],['London (ON)',42.9849,-81.2453,-5],['Victoria',48.4284,-123.3656,-8],['Saskatoon',52.1332,-106.6700,-6,'none'],['Regina',50.4452,-104.6189,-6,'none'],['St. John\'s',47.5615,-52.7126,-3.5],['Windsor',42.3149,-83.0364,-5],['Kitchener',43.4516,-80.4925,-5],['Whitehorse',60.7212,-135.0568,-8]]},
+  'Chile':{tz:'America/Santiago',dst:'cl',cities:[['Santiago',-33.4489,-70.6693,-4],['Valparaíso',-33.0472,-71.6127,-4],['Concepción',-36.8201,-73.0444,-4],['Antofagasta',-23.6509,-70.3975,-4],['Viña del Mar',-33.0245,-71.5518,-4],['Temuco',-38.7359,-72.5904,-4],['La Serena',-29.9027,-71.2519,-4],['Puerto Montt',-41.4693,-72.9424,-4],['Iquique',-20.2307,-70.1357,-4],['Punta Arenas',-53.1638,-70.9171,-4]]},
+  'Colombia':{tz:'America/Bogota',dst:'none',cities:[['Bogotá',4.7110,-74.0721,-5],['Medellín',6.2442,-75.5812,-5],['Cali',3.4516,-76.5320,-5],['Barranquilla',10.9685,-74.7813,-5],['Cartagena',10.3910,-75.4794,-5],['Cúcuta',7.8939,-72.5078,-5],['Bucaramanga',7.1193,-73.1227,-5],['Pereira',4.8087,-75.6906,-5],['Santa Marta',11.2404,-74.2110,-5],['Manizales',5.0689,-75.5174,-5]]},
+  'Costa Rica':{tz:'America/Costa_Rica',dst:'none',cities:[['San José',9.9281,-84.0907,-6],['Alajuela',10.0162,-84.2116,-6],['Limón',9.9907,-83.0359,-6],['Liberia',10.6346,-85.4377,-6]]},
+  'Cuba':{tz:'America/Havana',dst:'us',cities:[['Havana',23.1136,-82.3666,-5],['Santiago de Cuba',20.0247,-75.8219,-5],['Camagüey',21.3808,-77.9169,-5],['Holguín',20.8872,-76.2631,-5],['Santa Clara',22.4069,-79.9645,-5]]},
+  'Dominica':{tz:'America/Dominica',dst:'none',cities:[['Roseau',15.3092,-61.3794,-4]]},
+  'Dominican Republic':{tz:'America/Santo_Domingo',dst:'none',cities:[['Santo Domingo',18.4861,-69.9312,-4],['Santiago de los Caballeros',19.4517,-70.6970,-4],['La Romana',18.4273,-68.9728,-4],['Puerto Plata',19.7934,-70.6884,-4]]},
+  'Ecuador':{tz:'America/Guayaquil',dst:'none',cities:[['Quito',-0.1807,-78.4678,-5],['Guayaquil',-2.1894,-79.8891,-5],['Cuenca',-2.9001,-79.0059,-5],['Santo Domingo',-0.2542,-79.1750,-5],['Manta',-0.9677,-80.7089,-5]]},
+  'El Salvador':{tz:'America/El_Salvador',dst:'none',cities:[['San Salvador',13.6929,-89.2182,-6],['Santa Ana',13.9942,-89.5597,-6],['San Miguel',13.4833,-88.1833,-6]]},
+  'Grenada':{tz:'America/Grenada',dst:'none',cities:[["St. George's",12.0561,-61.7488,-4]]},
+  'Guatemala':{tz:'America/Guatemala',dst:'none',cities:[['Guatemala City',14.6349,-90.5069,-6],['Quetzaltenango',14.8347,-91.5180,-6],['Escuintla',14.3050,-90.7850,-6],['Antigua Guatemala',14.5586,-90.7295,-6]]},
+  'Guyana':{tz:'America/Guyana',dst:'none',cities:[['Georgetown',6.8013,-58.1551,-4]]},
+  'Haiti':{tz:'America/Port-au-Prince',dst:'us',cities:[['Port-au-Prince',18.5944,-72.3074,-5],['Cap-Haïtien',19.7594,-72.1980,-5],['Gonaïves',19.4485,-72.6890,-5]]},
+  'Honduras':{tz:'America/Tegucigalpa',dst:'none',cities:[['Tegucigalpa',14.0723,-87.1921,-6],['San Pedro Sula',15.5041,-88.0250,-6],['La Ceiba',15.7597,-86.7822,-6]]},
+  'Jamaica':{tz:'America/Jamaica',dst:'none',cities:[['Kingston',17.9714,-76.7931,-5],['Montego Bay',18.4762,-77.8939,-5],['Spanish Town',17.9910,-76.9574,-5]]},
+  'Mexico':{tz:'America/Mexico_City',tzCity:{"Canc\u00fan":'America/Cancun',"Chihuahua":'America/Chihuahua',"Culiac\u00e1n":'America/Chihuahua',"Hermosillo":'America/Hermosillo',"Ju\u00e1rez":'America/Chihuahua',"La Paz":'America/Chihuahua',"Mazatl\u00e1n":'America/Mazatlan',"Monterrey":'America/Monterrey',"M\u00e9rida":'America/Merida',"Tijuana":'America/Tijuana'},dst:'mx',cities:[['Mexico City',19.4326,-99.1332,-6],['Guadalajara',20.6597,-103.3496,-6],['Monterrey',25.6866,-100.3161,-6],['Puebla',19.0414,-98.2063,-6],['Tijuana',32.5149,-117.0382,-8],['León',21.1219,-101.6833,-6],['Juárez',31.6904,-106.4245,-7],['Zapopan',20.7214,-103.3918,-6],['Mérida',20.9674,-89.5926,-6],['Cancún',21.1619,-86.8515,-5,'none'],['Querétaro',20.5888,-100.3899,-6],['Toluca',19.2826,-99.6557,-6],['Chihuahua',28.6330,-106.0691,-7],['Aguascalientes',21.8853,-102.2916,-6],['Culiacán',24.8091,-107.3940,-7],['Acapulco',16.8531,-99.8237,-6],['Hermosillo',29.0729,-110.9559,-7,'none'],['Veracruz',19.1738,-96.1342,-6],['Morelia',19.7060,-101.1950,-6],['Oaxaca',17.0732,-96.7266,-6],['San Luis Potosí',22.1565,-100.9855,-6],['Mazatlán',23.2494,-106.4111,-7],['Puerto Vallarta',20.6534,-105.2253,-6],['La Paz',24.1426,-110.3128,-7]]},
+  'Nicaragua':{tz:'America/Managua',dst:'none',cities:[['Managua',12.1150,-86.2362,-6],['León',12.4379,-86.8780,-6],['Granada',11.9344,-85.9560,-6]]},
+  'Panama':{tz:'America/Panama',dst:'none',cities:[['Panama City',8.9824,-79.5199,-5],['Colón',9.3592,-79.9014,-5],['David',8.4333,-82.4333,-5]]},
+  'Paraguay':{tz:'America/Asuncion',dst:'py',cities:[['Asunción',-25.2637,-57.5759,-4],['Ciudad del Este',-25.5163,-54.6161,-4],['Encarnación',-27.3306,-55.8667,-4]]},
+  'Peru':{tz:'America/Lima',dst:'none',cities:[['Lima',-12.0464,-77.0428,-5],['Arequipa',-16.4090,-71.5375,-5],['Trujillo',-8.1160,-79.0300,-5],['Chiclayo',-6.7714,-79.8409,-5],['Cusco',-13.5319,-71.9675,-5],['Piura',-5.1945,-80.6328,-5],['Iquitos',-3.7491,-73.2538,-5],['Huancayo',-12.0653,-75.2049,-5]]},
+  'Puerto Rico':{tz:'America/Puerto_Rico',dst:'none',cities:[['San Juan',18.4655,-66.1057,-4],['Ponce',18.0111,-66.6141,-4],['Bayamón',18.3985,-66.1557,-4],['Mayagüez',18.2013,-67.1397,-4]]},
+  'Saint Kitts and Nevis':{tz:'America/St_Kitts',dst:'none',cities:[['Basseterre',17.3026,-62.7177,-4]]},
+  'Saint Lucia':{tz:'America/St_Lucia',dst:'none',cities:[['Castries',14.0101,-60.9875,-4]]},
+  'Saint Vincent and the Grenadines':{tz:'America/St_Vincent',dst:'none',cities:[['Kingstown',13.1600,-61.2248,-4]]},
+  'Suriname':{tz:'America/Paramaribo',dst:'none',cities:[['Paramaribo',5.8520,-55.2038,-3]]},
+  'Trinidad and Tobago':{tz:'America/Port_of_Spain',dst:'none',cities:[['Port of Spain',10.6918,-61.2225,-4],['San Fernando',10.2797,-61.4586,-4],['Chaguanas',10.5167,-61.4000,-4]]},
+  'United States':{tz:'America/New_York',tzCity:{"Albuquerque":'America/Denver',"Anchorage":'America/Anchorage',"Austin":'America/Chicago',"Baton Rouge":'America/Chicago',"Birmingham":'America/Chicago',"Boise":'America/Boise',"Chicago":'America/Chicago',"Colorado Springs":'America/Denver',"Dallas":'America/Chicago',"Denver":'America/Denver',"Des Moines":'America/Chicago',"Detroit":'America/Detroit',"El Paso":'America/Denver',"Fort Worth":'America/Chicago',"Fresno":'America/Los_Angeles',"Honolulu":'Pacific/Honolulu',"Houston":'America/Chicago',"Indianapolis":'America/Indianapolis',"Jackson":'America/Chicago',"Kansas City":'America/Chicago',"Las Vegas":'America/Los_Angeles',"Little Rock":'America/Chicago',"Los Angeles":'America/Los_Angeles',"Louisville":'America/Louisville',"Memphis":'America/Chicago',"Milwaukee":'America/Chicago',"Minneapolis":'America/Chicago',"Nashville":'America/Chicago',"New Orleans":'America/Chicago',"Oklahoma City":'America/Chicago',"Omaha":'America/Chicago',"Phoenix":'America/Phoenix',"Portland":'America/Los_Angeles',"Reno":'America/Los_Angeles',"Sacramento":'America/Los_Angeles',"Salt Lake City":'America/Denver',"San Antonio":'America/Chicago',"San Diego":'America/Los_Angeles',"San Francisco":'America/Los_Angeles',"San Jose":'America/Los_Angeles',"Seattle":'America/Los_Angeles',"Spokane":'America/Los_Angeles',"St. Louis":'America/Chicago',"Tucson":'America/Phoenix',"Tulsa":'America/Chicago',"Wichita":'America/Chicago'},dst:'us',cities:[
+    ['New York',40.7128,-74.0060,-5],['Los Angeles',34.0522,-118.2437,-8],['Chicago',41.8781,-87.6298,-6],
+    ['Houston',29.7604,-95.3698,-6],['Phoenix',33.4484,-112.0740,-7,'none'],['Philadelphia',39.9526,-75.1652,-5],
+    ['San Antonio',29.4241,-98.4936,-6],['San Diego',32.7157,-117.1611,-8],['Dallas',32.7767,-96.7970,-6],
+    ['San Jose',37.3382,-121.8863,-8],['Austin',30.2672,-97.7431,-6],['Jacksonville',30.3322,-81.6557,-5],
+    ['Fort Worth',32.7555,-97.3308,-6],['Columbus',39.9612,-82.9988,-5],['Charlotte',35.2271,-80.8431,-5],
+    ['San Francisco',37.7749,-122.4194,-8],['Indianapolis',39.7684,-86.1581,-5],['Seattle',47.6062,-122.3321,-8],
+    ['Denver',39.7392,-104.9903,-7],['Washington DC',38.9072,-77.0369,-5],['Boston',42.3601,-71.0589,-5],
+    ['El Paso',31.7619,-106.4850,-7],['Nashville',36.1627,-86.7816,-6],['Detroit',42.3314,-83.0458,-5],
+    ['Portland',45.5152,-122.6784,-8],['Memphis',35.1495,-90.0490,-6],['Oklahoma City',35.4676,-97.5164,-6],
+    ['Las Vegas',36.1699,-115.1398,-8],['Louisville',38.2527,-85.7585,-5],['Baltimore',39.2904,-76.6122,-5],
+    ['Milwaukee',43.0389,-87.9065,-6],['Albuquerque',35.0844,-106.6504,-7],['Tucson',32.2226,-110.9747,-7,'none'],
+    ['Fresno',36.7378,-119.7871,-8],['Sacramento',38.5816,-121.4944,-8],['Kansas City',39.0997,-94.5786,-6],
+    ['Atlanta',33.7490,-84.3880,-5],['Miami',25.7617,-80.1918,-5],['Raleigh',35.7796,-78.6382,-5],
+    ['Omaha',41.2565,-95.9345,-6],['Minneapolis',44.9778,-93.2650,-6],['Cleveland',41.4993,-81.6944,-5],
+    ['New Orleans',29.9511,-90.0715,-6],['Tampa',27.9506,-82.4572,-5],['Pittsburgh',40.4406,-79.9959,-5],
+    ['St. Louis',38.6270,-90.1994,-6],['Cincinnati',39.1031,-84.5120,-5],['Orlando',28.5383,-81.3792,-5],
+    ['Salt Lake City',40.7608,-111.8910,-7],['Buffalo',42.8864,-78.8784,-5],['Richmond',37.5407,-77.4360,-5],
+    ['Birmingham',33.5186,-86.8104,-6],['Boise',43.6150,-116.2023,-7],['Honolulu',21.3069,-157.8583,-10,'none'],
+    ['Anchorage',61.2181,-149.9003,-9],['Providence',41.8240,-71.4128,-5],['Hartford',41.7658,-72.6734,-5],
+    ['Charleston',32.7765,-79.9311,-5],['Des Moines',41.5868,-93.6250,-6],['Little Rock',34.7465,-92.2896,-6],
+    ['Jackson',32.2988,-90.1848,-6],['Spokane',47.6588,-117.4260,-8],['Reno',39.5296,-119.8138,-8],
+    ['Colorado Springs',38.8339,-104.8214,-7],['Wichita',37.6872,-97.3301,-6],['Lexington',38.0406,-84.5037,-5],
+    ['Toledo',41.6528,-83.5379,-5],['Tulsa',36.1540,-95.9928,-6],['Fort Lauderdale',26.1224,-80.1373,-5],
+    ['Newark',40.7357,-74.1724,-5],['Syracuse',43.0481,-76.1474,-5],['Albany',42.6526,-73.7562,-5],
+    ['Knoxville',35.9606,-83.9207,-5],['Baton Rouge',30.4515,-91.1871,-6],['Savannah',32.0809,-81.0912,-5]]},
+  'Uruguay':{tz:'America/Montevideo',dst:'none',cities:[['Montevideo',-34.9011,-56.1645,-3],['Salto',-31.3833,-57.9667,-3],['Punta del Este',-34.9611,-54.9500,-3],['Paysandú',-32.3214,-58.0756,-3]]},
+  'Venezuela':{tz:'America/Caracas',dst:'none',cities:[['Caracas',10.4806,-66.9036,-4],['Maracaibo',10.6544,-71.6520,-4],['Valencia',10.1621,-68.0077,-4],['Barquisimeto',10.0678,-69.3467,-4],['Maracay',10.2469,-67.5958,-4],['Ciudad Guayana',8.3533,-62.6528,-4],['Mérida',8.5897,-71.1561,-4]]},
+
+  /* ---------------- OCEANIA ---------------- */
+  'Australia':{tz:'Australia/Sydney',tzCity:{"Adelaide":'Australia/Adelaide',"Alice Springs":'Australia/Darwin',"Brisbane":'Australia/Brisbane',"Cairns":'Australia/Brisbane',"Darwin":'Australia/Darwin',"Gold Coast":'Australia/Brisbane',"Hobart":'Australia/Hobart',"Melbourne":'Australia/Melbourne',"Perth":'Australia/Perth',"Toowoomba":'Australia/Brisbane',"Townsville":'Australia/Brisbane'},dst:'au',cities:[
+    ['Sydney',-33.8688,151.2093,10],['Melbourne',-37.8136,144.9631,10],['Brisbane',-27.4698,153.0251,10,'none'],
+    ['Perth',-31.9505,115.8605,8,'none'],['Adelaide',-34.9285,138.6007,9.5],['Gold Coast',-28.0167,153.4000,10,'none'],
+    ['Canberra',-35.2809,149.1300,10],['Newcastle',-32.9283,151.7817,10],['Wollongong',-34.4278,150.8931,10],
+    ['Hobart',-42.8821,147.3272,10],['Geelong',-38.1499,144.3617,10],['Townsville',-19.2590,146.8169,10,'none'],
+    ['Cairns',-16.9186,145.7781,10,'none'],['Darwin',-12.4634,130.8456,9.5,'none'],['Toowoomba',-27.5598,151.9507,10,'none'],
+    ['Ballarat',-37.5622,143.8503,10],['Bendigo',-36.7570,144.2794,10],['Launceston',-41.4332,147.1441,10],
+    ['Alice Springs',-23.6980,133.8807,9.5,'none']]},
+  'Fiji':{tz:'Pacific/Fiji',dst:'none',cities:[['Suva',-18.1416,178.4419,12],['Nadi',-17.7765,177.4356,12],['Lautoka',-17.6169,177.4505,12]]},
+  'Kiribati':{tz:'Pacific/Tarawa',dst:'none',cities:[['Tarawa',1.3278,172.9770,12]]},
+  'Marshall Islands':{tz:'Pacific/Majuro',dst:'none',cities:[['Majuro',7.1164,171.1855,12]]},
+  'Micronesia':{tz:'Pacific/Kosrae',tzCity:{"Chuuk":'Pacific/Chuuk'},dst:'none',cities:[['Palikir',6.9248,158.1611,11],['Chuuk',7.4467,151.8433,10]]},
+  'Nauru':{tz:'Pacific/Nauru',dst:'none',cities:[['Yaren',-0.5477,166.9209,12]]},
+  'New Zealand':{tz:'Pacific/Auckland',dst:'nz',cities:[['Auckland',-36.8509,174.7645,12],['Wellington',-41.2924,174.7787,12],['Christchurch',-43.5320,172.6306,12],['Hamilton',-37.7870,175.2793,12],['Tauranga',-37.6878,176.1651,12],['Dunedin',-45.8788,170.5028,12],['Palmerston North',-40.3523,175.6082,12],['Napier',-39.4928,176.9120,12],['Queenstown',-45.0312,168.6626,12]]},
+  'Palau':{tz:'Pacific/Palau',dst:'none',cities:[['Ngerulmud',7.5006,134.6242,9],['Koror',7.3436,134.4787,9]]},
+  'Papua New Guinea':{tz:'Pacific/Port_Moresby',dst:'none',cities:[['Port Moresby',-9.4438,147.1803,10],['Lae',-6.7305,146.9962,10],['Mount Hagen',-5.8575,144.2300,10]]},
+  'Samoa':{tz:'Pacific/Apia',dst:'none',cities:[['Apia',-13.8506,-171.7513,-11]]},
+  'Solomon Islands':{tz:'Pacific/Guadalcanal',dst:'none',cities:[['Honiara',-9.4456,159.9729,11]]},
+  'Tonga':{tz:'Pacific/Tongatapu',dst:'none',cities:[["Nuku'alofa",-21.1394,-175.2049,13]]},
+  'Tuvalu':{tz:'Pacific/Funafuti',dst:'none',cities:[['Funafuti',-8.5211,179.1962,12]]},
+  'Vanuatu':{tz:'Pacific/Efate',dst:'none',cities:[['Port Vila',-17.7333,168.3273,11],['Luganville',-15.5126,167.1770,11]]}
+  };
+
+  /* =========================================================
+     DAYLIGHT SAVING — year-aware, region-specific.
+     Historical DST is genuinely messy; these rules cover the
+     modern era accurately and degrade gracefully before it.
+     ========================================================= */
+  function nthSunday(year, month, n){
+    const d = new Date(Date.UTC(year, month, 1));
+    const day = d.getUTCDay();
+    return Date.UTC(year, month, 1 + ((7 - day) % 7) + (n-1)*7);
+  }
+  function lastSunday(year, month){
+    const d = new Date(Date.UTC(year, month+1, 0));
+    return Date.UTC(year, month, d.getUTCDate() - d.getUTCDay());
+  }
+  function nthWeekday(year, month, weekday, n){
+    const d = new Date(Date.UTC(year, month, 1));
+    const day = d.getUTCDay();
+    return Date.UTC(year, month, 1 + ((weekday - day + 7) % 7) + (n-1)*7);
+  }
+  function lastWeekday(year, month, weekday){
+    const d = new Date(Date.UTC(year, month+1, 0));
+    const day = d.getUTCDay();
+    return Date.UTC(year, month, d.getUTCDate() - ((day - weekday + 7) % 7));
+  }
+
+  function dstActive(rule, t, y){
+    switch(rule){
+      case 'eu': {
+        if(y < 1980) return false;
+        const start = lastSunday(y, 2);                       // last Sun March
+        const end   = (y >= 1996) ? lastSunday(y, 9) : lastSunday(y, 8); // Oct from 1996, Sep before
+        return t >= start && t < end;
+      }
+      case 'us': {
+        if(y < 1966) return false;
+        let start, end;
+        if(y >= 2007){ start = nthSunday(y,2,2); end = nthSunday(y,10,1); }      // 2nd Sun Mar → 1st Sun Nov
+        else if(y >= 1987){ start = nthSunday(y,3,1); end = lastSunday(y,9); }   // 1st Sun Apr → last Sun Oct
+        else if(y === 1974){ start = Date.UTC(y,0,6); end = lastSunday(y,10); }  // energy crisis
+        else if(y === 1975){ start = Date.UTC(y,1,23); end = lastSunday(y,9); }
+        else { start = lastSunday(y,3); end = lastSunday(y,9); }                 // last Sun Apr → last Sun Oct
+        return t >= start && t < end;
+      }
+      case 'ru': {
+        if(y < 1981) return false;
+        if(t >= Date.UTC(2011,2,27) && t < Date.UTC(2014,9,26)) return true;     // permanent summer time
+        if(y > 2014) return false;
+        return t >= lastSunday(y,2) && t < lastSunday(y,9);
+      }
+      case 'tr': return false;   // handled in effectiveOffset
+      case 'au': {               // southern hemisphere
+        if(y < 1971) return false;
+        const start = (y >= 2008) ? nthSunday(y,9,1) : lastSunday(y,9);  // Oct
+        const end   = (y >= 2008) ? nthSunday(y,3,1) : lastSunday(y,2);  // Apr / Mar
+        return t >= start || t < end;
+      }
+      case 'nz': {
+        if(y < 1975) return false;
+        const start = (y >= 2007) ? lastSunday(y,8) : nthSunday(y,9,1);
+        const end   = (y >= 2007) ? nthSunday(y,3,1) : nthSunday(y,2,3);
+        return t >= start || t < end;
+      }
+      case 'br': {
+        if(y < 1985 || y > 2019) return false;
+        return t >= nthSunday(y,9,3) || t < nthSunday(y,1,3);
+      }
+      case 'cl': {
+        if(y < 1970) return false;
+        return t >= nthSunday(y,8,2) || t < nthSunday(y,3,1);
+      }
+      case 'py': {
+        if(y < 1975 || y > 2024) return false;
+        return t >= nthSunday(y,9,1) || t < nthSunday(y,2,4);
+      }
+      case 'mx': {
+        if(y < 1996 || y > 2022) return false;
+        return t >= nthSunday(y,3,1) && t < lastSunday(y,9);
+      }
+      case 'ir': {
+        if(y < 1991 || y > 2022) return false;
+        return t >= Date.UTC(y,2,22) && t < Date.UTC(y,8,22);
+      }
+      case 'il': {
+        if(y < 1985) return false;
+        return t >= lastWeekday(y,2,5) && t < lastSunday(y,9);   // last Fri Mar → last Sun Oct
+      }
+      case 'eg': {
+        if(y < 1988 || (y > 2014 && y < 2023) || y === 2011) return false;
+        return t >= lastWeekday(y,3,5) && t < lastWeekday(y,8,4);
+      }
+      case 'cn': {
+        if(y < 1986 || y > 1991) return false;
+        return t >= nthSunday(y,3,2) && t < nthSunday(y,8,2);
+      }
+      default: return false;
+    }
+  }
+
+  // The browser ships the IANA time-zone database, which knows every historical
+  // rule change (British Summer Time from 1916, US war time, Turkey's 1985 start
+  // date, and so on). Ask it directly rather than guessing from simplified rules.
+  function ianaOffset(tz, yyyy, mm, dd, hh, min){
+    if(!tz || typeof Intl === 'undefined' || !Intl.DateTimeFormat) return null;
+    try{
+      const local = Date.UTC(yyyy, mm-1, dd, hh, min);
+      const fmt = new Intl.DateTimeFormat('en-GB', {timeZone: tz, timeZoneName: 'longOffset'});
+      let off = 0;
+      // the offset depends on the instant, which depends on the offset: iterate
+      for(let i = 0; i < 3; i++){
+        const part = fmt.formatToParts(new Date(local - off*3600000))
+                        .find(p => p.type === 'timeZoneName');
+        if(!part) return null;
+        const m = /GMT([+-])(\d{2}):(\d{2})/.exec(part.value);
+        const v = m ? (m[1] === '-' ? -1 : 1) * (Number(m[2]) + Number(m[3])/60)
+                    : (/^GMT$/.test(part.value) ? 0 : null);
+        if(v === null || !isFinite(v)) return null;
+        if(v === off) return v;
+        off = v;
+      }
+      return off;
+    }catch(e){ return null; }
+  }
+  function effectiveOffset(baseOff, rule, yyyy, mm, dd, hh, min, tz){
+    const exact = ianaOffset(tz, yyyy, mm, dd, hh, min);
+    if(exact !== null) return exact;
+    const approx = Date.UTC(yyyy, mm-1, dd, hh, min) - baseOff*3600000;
+    if(rule === 'tr'){
+      // Turkey moved to permanent UTC+3 on 8 September 2016
+      if(approx >= Date.UTC(2016,8,8)) return 3;
+      return baseOff + (dstActive('eu', approx, yyyy) ? 1 : 0);
+    }
+    return baseOff + (dstActive(rule, approx, yyyy) ? 1 : 0);
+  }
+
+  /* =========================================================
+     ASTRONOMY ENGINE
+     Keplerian elements (JPL, valid 1800–2050) for the planets,
+     ELP-style truncated series for the Moon, mean elements for
+     the lunar nodes and the mean lunar apogee (Black Moon Lilith).
+     ========================================================= */
+  const DEG = Math.PI/180;
+  function normDeg(x){ x = x % 360; if(x<0) x += 360; return x; }
+  function toJD(date){ return date.getTime()/86400000 + 2440587.5; }
+
+  const ELEMENTS = {
+    Mercury: [0.38709927,0.00000037,0.20563593,0.00001906,7.00497902,-0.00594749,252.25032350,149472.67411175,77.45779628,0.16047689,48.33076593,-0.12534081],
+    Venus:   [0.72333566,0.00000390,0.00677672,-0.00004107,3.39467605,-0.00078890,181.97909950,58517.81538729,131.60246718,0.00268329,76.67984255,-0.27769418],
+    Earth:   [1.00000261,0.00000562,0.01671123,-0.00004392,-0.00001531,-0.01294668,100.46457166,35999.37244981,102.93768193,0.32327364,0.0,0.0],
+    Mars:    [1.52371034,0.00001847,0.09339410,0.00007882,1.84969142,-0.00813131,-4.55343205,19140.30268499,-23.94362959,0.44441088,49.55953891,-0.29257343],
+    Jupiter: [5.20288700,-0.00011607,0.04838624,-0.00013253,1.30439695,-0.00183714,34.39644051,3034.74612775,14.72847983,0.21252668,100.47390909,0.20469106],
+    Saturn:  [9.53667594,-0.00125060,0.05386179,-0.00050991,2.48599187,0.00193609,49.95424423,1222.49362201,92.59887831,-0.41897216,113.66242448,-0.28867794],
+    Uranus:  [19.18916464,-0.00196176,0.04725744,-0.00004397,0.77263783,-0.00242939,313.23810451,428.48202785,170.95427630,0.40805281,74.01692503,0.04240589],
+    Neptune: [30.06992276,0.00026291,0.00859048,0.00005105,1.77004347,0.00035372,-55.12002969,218.45945325,44.96476227,-0.32241464,131.78422574,-0.00508664],
+    Pluto:   [39.48211675,-0.00031596,0.24882730,0.00005170,17.14001206,0.00004818,238.92903833,145.20780515,224.06891629,-0.04062942,110.30393684,-0.01183482]
+  };
+
+  function heliocentric(name, T){
+    const el = ELEMENTS[name];
+    const a = el[0] + el[1]*T;
+    const e = el[2] + el[3]*T;
+    const i = (el[4] + el[5]*T) * DEG;
+    const L = el[6] + el[7]*T;
+    const peri = el[8] + el[9]*T;
+    const node = el[10] + el[11]*T;
+    let M = normDeg(L - peri); if(M>180) M -= 360;
+    const Mrad = M*DEG;
+    let E = Mrad;
+    for(let k=0;k<10;k++){ E = E - (E - e*Math.sin(E) - Mrad)/(1 - e*Math.cos(E)); }
+    const xp = a*(Math.cos(E)-e), yp = a*Math.sqrt(1-e*e)*Math.sin(E);
+    const w = (peri-node)*DEG, om = node*DEG;
+    const cosW=Math.cos(w),sinW=Math.sin(w),cosOm=Math.cos(om),sinOm=Math.sin(om),cosI=Math.cos(i),sinI=Math.sin(i);
+    const x = (cosW*cosOm - sinW*sinOm*cosI)*xp + (-sinW*cosOm - cosW*sinOm*cosI)*yp;
+    const y = (cosW*sinOm + sinW*cosOm*cosI)*xp + (-sinW*sinOm + cosW*cosOm*cosI)*yp;
+    const z = (sinW*sinI)*xp + (cosW*sinI)*yp;
+    return {x,y,z};
+  }
+  function planetLongitude(name,T){
+    const p = heliocentric(name,T), earth = heliocentric('Earth',T);
+    // The Keplerian elements above are referred to the mean ecliptic and equinox
+    // of J2000. Tropical astrology needs the equinox OF DATE, so we add the
+    // general precession accumulated since J2000 (about 50.29" per year).
+    const precession = (5029.0966*T + 1.11113*T*T)/3600;
+    return normDeg(Math.atan2(p.y-earth.y, p.x-earth.x)/DEG + precession);
+  }
+  // Apparent solar longitude — accurate to about 0.01 degrees
+  function sunLongitude(T){
+    const L0 = 280.46646 + 36000.76983*T + 0.0003032*T*T;
+    const M  = (357.52911 + 35999.05029*T - 0.0001537*T*T) * DEG;
+    const C  = (1.914602 - 0.004817*T - 0.000014*T*T)*Math.sin(M)
+             + (0.019993 - 0.000101*T)*Math.sin(2*M)
+             +  0.000289*Math.sin(3*M);
+    const om = (125.04 - 1934.136*T) * DEG;
+    return normDeg(L0 + C - 0.00569 - 0.00478*Math.sin(om));
+  }
+  function moonLongitude(T){
+    const Lp=218.3164477+481267.88123421*T-0.0015786*T*T+T*T*T/538841;
+    const D =297.8501921+445267.1114034*T-0.0018819*T*T+T*T*T/545868;
+    const M =357.5291092+35999.0502909*T-0.0001536*T*T;
+    const Mp=134.9633964+477198.8675055*T+0.0087414*T*T+T*T*T/69699;
+    const F =93.2720950+483202.0175233*T-0.0036539*T*T-T*T*T/3526000;
+    const d=DEG;
+    const dL =
+       6.288774*Math.sin(Mp*d)      +1.274027*Math.sin((2*D-Mp)*d)  +0.658314*Math.sin(2*D*d)
+      +0.213618*Math.sin(2*Mp*d)    -0.185116*Math.sin(M*d)         -0.114332*Math.sin(2*F*d)
+      +0.058793*Math.sin((2*D-2*Mp)*d)+0.057066*Math.sin((2*D-M-Mp)*d)+0.053322*Math.sin((2*D+Mp)*d)
+      +0.045758*Math.sin((2*D-M)*d) -0.040923*Math.sin((M-Mp)*d)    -0.034720*Math.sin(D*d)
+      -0.030383*Math.sin((M+Mp)*d)  +0.015327*Math.sin((2*D-2*F)*d) -0.012528*Math.sin((Mp+2*F)*d)
+      +0.010980*Math.sin((Mp-2*F)*d)+0.010675*Math.sin((4*D-Mp)*d)  +0.010034*Math.sin(3*Mp*d)
+      +0.008548*Math.sin((4*D-2*Mp)*d)-0.007888*Math.sin((2*D+M-Mp)*d)-0.006766*Math.sin((2*D+M)*d)
+      -0.005163*Math.sin((D-Mp)*d)  +0.004987*Math.sin((D+M)*d)     +0.004036*Math.sin((2*D-M+Mp)*d)
+      +0.003994*Math.sin((2*D+2*Mp)*d)+0.003861*Math.sin(4*D*d)     +0.003665*Math.sin((2*D-3*Mp)*d);
+    return normDeg(Lp+dL);
+  }
+  // Mean ascending lunar node (true node oscillates ±1.5° around it)
+  function meanNode(T){
+    return normDeg(125.0445479 - 1934.1362891*T + 0.0020754*T*T + T*T*T/467441);
+  }
+  // Mean lunar apogee = Black Moon Lilith
+  function meanLilith(T){
+    const perigee = 83.3532465 + 4069.0137287*T - 0.0103200*T*T - T*T*T/80053;
+    return normDeg(perigee + 180);
+  }
+  function obliquity(T){ return 23.4392911 - 0.0130042*T - 0.00000016*T*T + 0.000000504*T*T*T; }
+  function gmstDeg(jd){
+    const T=(jd-2451545.0)/36525;
+    return normDeg(280.46061837 + 360.98564736629*(jd-2451545.0) + 0.000387933*T*T - T*T*T/38710000);
+  }
+  function ascendantOf(lst, eps, latDeg){
+    // ASC = atan2( cos(RAMC), -(sin(RAMC)cos(eps) + tan(lat)sin(eps)) )
+    const lstR = lst*DEG;
+    // The rising degree is well defined at any inhabited latitude; clamp only
+    // far enough from the poles to keep tan(lat) finite.
+    const latR = Math.max(-89.5, Math.min(89.5, latDeg)) * DEG;
+    const y = Math.cos(lstR);
+    const x = -(Math.sin(lstR)*Math.cos(eps) + Math.tan(latR)*Math.sin(eps));
+    let asc = normDeg(Math.atan2(y,x)/DEG);
+    // The rising degree must follow the midheaven by 0-180 degrees. Beyond the
+    // polar circles atan2 can return the opposite point, so flip it when it does.
+    if(normDeg(asc - midheavenOf(lst, eps)) > 180) asc = normDeg(asc + 180);
+    return asc;
+  }
+  function midheavenOf(lst, eps){
+    const lstR = lst*DEG;
+    return normDeg(Math.atan2(Math.sin(lstR), Math.cos(lstR)*Math.cos(eps))/DEG);
+  }
+
+  const SIGNS = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+  const SIGN_GLYPH = ['\u2648','\u2649','\u264A','\u264B','\u264C','\u264D','\u264E','\u264F','\u2650','\u2651','\u2652','\u2653'];
+  const SIGN_ELEMENT = ['fire','earth','air','water','fire','earth','air','water','fire','earth','air','water'];
+  const SIGN_MODE = ['cardinal','fixed','mutable','cardinal','fixed','mutable','cardinal','fixed','mutable','cardinal','fixed','mutable'];
+  const SIGN_RULER = ['Mars','Venus','Mercury','Moon','Sun','Mercury','Venus','Pluto','Jupiter','Saturn','Uranus','Neptune'];
+  const ELEM_COLOR = { fire:'#c92f1e', earth:'#1e7d43', air:'#c48f00', water:'#173f8a' };
+  const ELEM_COLOR_DARK = { fire:'#ff7a5c', earth:'#5fcf8e', air:'#f0c34a', water:'#7fa8f5' };
+
+  const HOUSE_MEANINGS = [
+    'Self & Identity','Money & Possessions','Mind & Communication','Home & Roots',
+    'Love & Creativity','Work & Health','Partnership & Marriage','Shared Wealth & Rebirth',
+    'Travel & Beliefs','Career & Reputation','Friends & Hopes','Secrets & The Unseen'
+  ];
+
+  function signOf(lon){
+    const idx=Math.floor(normDeg(lon)/30);
+    return { sign:SIGNS[idx], glyph:SIGN_GLYPH[idx], elem:SIGN_ELEMENT[idx],
+             mode:SIGN_MODE[idx], ruler:SIGN_RULER[idx], deg:normDeg(lon)%30, signIdx:idx };
+  }
+  function degMin(x){
+    const d = Math.floor(x);
+    let m = Math.round((x - d)*60);
+    let dd = d;
+    if(m===60){ m=0; dd+=1; }
+    return dd + '\u00b0' + String(m).padStart(2,'0') + "'";
+  }
+  function fullPos(lon){
+    const s = signOf(lon);
+    return degMin(s.deg) + ' ' + s.sign;
+  }
+
+  const PLANETS = [
+    {key:'Sun', glyph:'\u2609'}, {key:'Moon', glyph:'\u263D'}, {key:'Mercury', glyph:'\u263F'},
+    {key:'Venus', glyph:'\u2640'}, {key:'Mars', glyph:'\u2642'}, {key:'Jupiter', glyph:'\u2643'},
+    {key:'Saturn', glyph:'\u2644'}, {key:'Uranus', glyph:'\u2645'}, {key:'Neptune', glyph:'\u2646'},
+    {key:'Pluto', glyph:'\u2647'}
+  ];
+
+  /* ---- Porphyry houses: quadrants trisected between the four angles ---- */
+  function porphyryCusps(asc, mc){
+    const ic = normDeg(mc+180), dsc = normDeg(asc+180);
+    const c = new Array(13);
+    c[1]=asc; c[4]=ic; c[7]=dsc; c[10]=mc;
+    const q1 = normDeg(ic - asc);   c[2]=normDeg(asc+q1/3);  c[3]=normDeg(asc+2*q1/3);
+    const q2 = normDeg(dsc - ic);   c[5]=normDeg(ic+q2/3);   c[6]=normDeg(ic+2*q2/3);
+    const q3 = normDeg(mc - dsc);   c[8]=normDeg(dsc+q3/3);  c[9]=normDeg(dsc+2*q3/3);
+    const q4 = normDeg(asc - mc);   c[11]=normDeg(mc+q4/3);  c[12]=normDeg(mc+2*q4/3);
+    return c;
+  }
+  function houseOf(lon, cusps){
+    for(let h=1; h<=12; h++){
+      const a = cusps[h], b = cusps[h===12?1:h+1];
+      const span = normDeg(b-a), rel = normDeg(lon-a);
+      if(rel < span || span === 0) return h;
+    }
+    return 1;
+  }
+
+  /* ---- aspects ---- */
+  const ASPECT_DEFS = [
+    {name:'Conjunction', glyph:'\u260C', angle:0,   orb:8, kind:'conj'},
+    {name:'Sextile',     glyph:'\u26B9', angle:60,  orb:5, kind:'soft'},
+    {name:'Square',      glyph:'\u25A1', angle:90,  orb:7, kind:'hard'},
+    {name:'Trine',       glyph:'\u25B3', angle:120, orb:7, kind:'soft'},
+    {name:'Opposition',  glyph:'\u260D', angle:180, orb:8, kind:'hard'}
+  ];
+  const ASPECT_COLOR = { hard:'#c92f1e', soft:'#1e7d43', conj:'#d9a406' };
+  function calcAspects(positions){
+    const out = [];
+    const n = Math.min(positions.length, 10); // aspects between the ten bodies only
+    for(let i=0;i<n;i++){
+      for(let j=i+1;j<n;j++){
+        let diff = Math.abs(positions[i].lon - positions[j].lon);
+        if(diff>180) diff = 360-diff;
+        for(const def of ASPECT_DEFS){
+          const off = Math.abs(diff - def.angle);
+          if(off <= def.orb){
+            out.push({a:i, b:j, name:def.name, glyph:def.glyph, kind:def.kind, orb:off,
+                      applying:off < def.orb/2});
+            break;
+          }
+        }
+      }
+    }
+    out.sort((x,y)=>x.orb-y.orb);
+    return out;
+  }
+
+  const MOON_PHASES = [
+    'New Moon','Waxing Crescent','First Quarter','Waxing Gibbous',
+    'Full Moon','Waning Gibbous','Last Quarter','Waning Crescent'
+  ];
+  function moonPhase(sunLon, moonLon){
+    const d = normDeg(moonLon - sunLon);
+    const idx = Math.floor((d + 22.5) / 45) % 8;
+    return { name: MOON_PHASES[idx], elongation: d };
+  }
+
+  function computeChart(dateUTC, latDeg, lonDeg, timeKnown){
+    const jd = toJD(dateUTC);
+    const T = (jd - 2451545.0) / 36525;
+    const eps = obliquity(T)*DEG;
+    const lst = normDeg(gmstDeg(jd) + lonDeg);
+
+    const positions = [];
+    PLANETS.forEach(p=>{
+      let lon;
+      if(p.key==='Sun') lon = sunLongitude(T);
+      else if(p.key==='Moon') lon = moonLongitude(T);
+      else lon = planetLongitude(p.key, T);
+      let retro = false, speed = 0;
+      if(p.key!=='Sun' && p.key!=='Moon'){
+        const T2 = (jd - 1 - 2451545.0)/36525;
+        const lonPrev = planetLongitude(p.key, T2);
+        let diff = normDeg(lon - lonPrev); if(diff>180) diff -= 360;
+        speed = diff; retro = diff < 0;
+      }
+      positions.push({ key:p.key, glyph:p.glyph, lon, retro, speed, major:true, ...signOf(lon) });
+    });
+
+    // sensitive points
+    const nn = meanNode(T), sn = normDeg(nn+180), lil = meanLilith(T);
+    positions.push({ key:'North Node', glyph:'\u260A', lon:nn,  retro:true,  speed:-0.053, major:false, ...signOf(nn) });
+    positions.push({ key:'South Node', glyph:'\u260B', lon:sn,  retro:true,  speed:-0.053, major:false, ...signOf(sn) });
+    positions.push({ key:'Lilith',     glyph:'\u26B8', lon:lil, retro:false, speed:0.111,  major:false, ...signOf(lil) });
+
+    const asc = ascendantOf(lst, eps, latDeg);
+    const mc  = midheavenOf(lst, eps);
+    const cusps = porphyryCusps(asc, mc);
+
+    // Part of Fortune — day/night formula
+    const sunLon = positions[0].lon, moonLon = positions[1].lon;
+    const sunHouse = houseOf(sunLon, cusps);
+    const isDay = sunHouse >= 7;
+    const fortune = normDeg(isDay ? (asc + moonLon - sunLon) : (asc + sunLon - moonLon));
+    positions.push({ key:'Fortune', glyph:'\u2297', lon:fortune, retro:false, speed:0, major:false, ...signOf(fortune) });
+
+    positions.forEach(p=>{ p.house = houseOf(p.lon, cusps); });
+
+    const houses = [];
+    for(let h=1; h<=12; h++){
+      houses.push({ num:h, cusp:cusps[h], ...signOf(cusps[h]), meaning:HOUSE_MEANINGS[h-1] });
+    }
+
+    // element / modality balance across the ten bodies + ASC
+    const elemCount = {fire:0,earth:0,air:0,water:0};
+    const modeCount = {cardinal:0,fixed:0,mutable:0};
+    for(let i=0;i<10;i++){ elemCount[positions[i].elem]++; modeCount[positions[i].mode]++; }
+    const ascSign = signOf(asc);
+    elemCount[ascSign.elem]++; modeCount[ascSign.mode]++;
+
+    const dominantElem = Object.keys(elemCount).reduce((a,b)=>elemCount[a]>=elemCount[b]?a:b);
+    const dominantMode = Object.keys(modeCount).reduce((a,b)=>modeCount[a]>=modeCount[b]?a:b);
+    const chartRuler = ascSign.ruler;
+    const rulerPos = positions.find(p=>p.key===chartRuler);
+
+    return {
+      positions, ascendant: asc, ascSign, mc, mcSign: signOf(mc),
+      ic: normDeg(mc+180), dsc: normDeg(asc+180),
+      cusps, houses, aspects: calcAspects(positions),
+      elemCount, modeCount, dominantElem, dominantMode,
+      chartRuler, rulerPos, isDay, timeKnown,
+      phase: moonPhase(sunLon, moonLon), jd
+    };
+  }
+
+  /* =========================================================
+     FORM WIRING
+     ========================================================= */
+  const $ = id => document.getElementById(id);
+  const nameInput=$('nameInput'), birthInput=$('birthInput'), timeInput=$('timeInput'),
+        countryInput=$('countryInput'), cityInput=$('cityInput'), coordBox=$('coordBox'),
+        coordVal=$('coordVal'), coordSub=$('coordSub'), manualToggle=$('manualToggle'),
+        manualPanel=$('manualPanel'), latInput=$('latInput'), lonInput=$('lonInput'),
+        tzManual=$('tzManual'), occupationInput=$('occupationInput'), wishInput=$('wishInput'),
+        obstacleInput=$('obstacleInput'), crossroadsInput=$('crossroadsInput'), extraInput=$('extraInput'),
+        emailInput=$('emailInput'), orderInput=$('orderInput'), genBtn=$('genBtn'),
+        formHint=$('formHint'), dateErr=$('dateErr'), emailErr=$('emailErr'),
+        noTimeRow=$('noTimeRow'), rankSummary=$('rankSummary'), progressBar=$('progressBar');
+
+  Object.keys(GEO).sort((a,b)=>a.localeCompare(b)).forEach(c=>{
+    const opt = document.createElement('option');
+    opt.value = c; opt.textContent = c;
+    countryInput.appendChild(opt);
+  });
+
+  const TZ_OFFSETS = [-12,-11,-10,-9.5,-9,-8,-7,-6,-5,-4.5,-4,-3.5,-3,-2,-1,0,1,2,3,3.5,4,4.5,5,5.5,5.75,6,6.5,7,8,8.75,9,9.5,10,10.5,11,11.5,12,12.75,13,14];
+  TZ_OFFSETS.forEach(off=>{
+    const opt = document.createElement('option');
+    opt.value = off;
+    const sign = off>=0 ? '+' : '-';
+    const abs = Math.abs(off);
+    const h = Math.trunc(abs);
+    const m = Math.round((abs-h)*60);
+    opt.textContent = 'UTC' + sign + h + (m ? ':'+String(m).padStart(2,'0') : ':00');
+    tzManual.appendChild(opt);
+  });
+
+  let userName='', userBirth='', userTime='', userGender='', userCountry='', userCity='',
+      userLat=0, userLon=0, userBaseOff=0, userDstRule='none', userTz='', manualMode=false, timeKnown=true,
+      userOccupation='', userStatus='', userWish='', userObstacle='', userCrossroads='',
+      userExtra='', userEmail='', userOrder='';
+  let ranking = [];
+  let chart = null;
+  let usedOffset = 0;
+
+  /* ---- "I don't know my birth time" ---- */
+  noTimeRow.addEventListener('click', ()=>{
+    timeKnown = !noTimeRow.classList.toggle('on');
+    timeInput.disabled = !timeKnown;
+    if(!timeKnown){ timeInput.value = '12:00'; }
+    validateForm();
+  });
+
+  manualToggle.addEventListener('click', ()=>{
+    manualMode = !manualMode;
+    manualPanel.classList.toggle('show', manualMode);
+    manualToggle.textContent = manualMode ? 'Use the country and city list instead' : 'Enter coordinates manually instead';
+    countryInput.disabled = manualMode;
+    cityInput.disabled = manualMode || countryInput.value==='';
+    coordBox.classList.remove('show');
+    validateForm();
+  });
+
+  countryInput.addEventListener('change', ()=>{
+    const c = countryInput.value;
+    cityInput.innerHTML = '';
+    coordBox.classList.remove('show');
+    if(!c){ cityInput.disabled = true; cityInput.innerHTML = '<option value="">Select your country first…</option>'; validateForm(); return; }
+    cityInput.disabled = false;
+    const def = document.createElement('option');
+    def.value = ''; def.textContent = 'Select your city…';
+    cityInput.appendChild(def);
+    GEO[c].cities.slice().map((city,i)=>({city,i}))
+      .sort((a,b)=>a.city[0].localeCompare(b.city[0]))
+      .forEach(({city,i})=>{
+        const opt = document.createElement('option');
+        opt.value = i; opt.textContent = city[0];
+        cityInput.appendChild(opt);
+      });
+    validateForm();
+  });
+
+  cityInput.addEventListener('change', ()=>{
+    const c = countryInput.value;
+    if(!c || cityInput.value===''){ coordBox.classList.remove('show'); validateForm(); return; }
+    const city = GEO[c].cities[parseInt(cityInput.value,10)];
+    userLat = city[1]; userLon = city[2]; userBaseOff = city[3];
+    userDstRule = city[4] || GEO[c].dst;
+    userTz = (GEO[c].tzCity && GEO[c].tzCity[city[0]]) || GEO[c].tz || '';
+    userCity = city[0]; userCountry = c;
+    refreshCoordBox();
+    validateForm();
+  });
+
+  function offsetLabel(off){
+    const sign = off>=0?'+':'-'; const abs=Math.abs(off);
+    const h=Math.trunc(abs), m=Math.round((abs-h)*60);
+    return 'UTC'+sign+h+(m?':'+String(m).padStart(2,'0'):'');
+  }
+
+  function refreshCoordBox(){
+    if(manualMode) return;
+    if(!userCity) return;
+    let sub = 'Standard time ' + offsetLabel(userBaseOff);
+    if(parsedDateOk()){
+      const [dd,mm,yyyy] = birthInput.value.split('/').map(Number);
+      const [hh,min] = (timeInput.value||'12:00').split(':').map(Number);
+      const eff = effectiveOffset(userBaseOff, userDstRule, yyyy, mm, dd, hh, min, userTz);
+      sub = 'Time zone used: ' + offsetLabel(eff) +
+            (eff !== userBaseOff ? ' \u00b7 daylight saving was in force on your birth date' : ' \u00b7 no daylight saving on your birth date');
+    } else {
+      sub += ' \u00b7 daylight saving is applied automatically once your birth date is entered';
+    }
+    showCoords(userLat, userLon, sub);
+  }
+
+  function showCoords(lat, lon, subText){
+    coordVal.textContent = Math.abs(lat).toFixed(4) + '\u00b0 ' + (lat>=0?'N':'S') + ',  ' +
+                           Math.abs(lon).toFixed(4) + '\u00b0 ' + (lon>=0?'E':'W');
+    coordSub.textContent = subText;
+    coordBox.classList.add('show');
+  }
+
+  function manualValid(){
+    const lat = parseFloat(latInput.value), lon = parseFloat(lonInput.value);
+    return !isNaN(lat) && !isNaN(lon) && lat>=-90 && lat<=90 && lon>=-180 && lon<=180 && tzManual.value!=='';
+  }
+  [latInput, lonInput].forEach(el=>el.addEventListener('input', ()=>{
+    if(manualValid()) showCoords(parseFloat(latInput.value), parseFloat(lonInput.value),
+        'Manual coordinates \u00b7 ' + offsetLabel(parseFloat(tzManual.value)) + ' as selected \u00b7 daylight saving not applied');
+    else coordBox.classList.remove('show');
+    validateForm();
+  }));
+  tzManual.addEventListener('change', ()=>{
+    if(manualValid()) showCoords(parseFloat(latInput.value), parseFloat(lonInput.value),
+        'Manual coordinates \u00b7 ' + offsetLabel(parseFloat(tzManual.value)) + ' as selected \u00b7 daylight saving not applied');
+    validateForm();
+  });
+
+  birthInput.addEventListener('input', ()=>{
+    const digits = birthInput.value.replace(/\D/g,'').slice(0,8);
+    let out=''; for(let i=0;i<digits.length;i++){ if(i===2||i===4) out+='/'; out+=digits[i]; }
+    birthInput.value = out; refreshCoordBox(); validateForm();
+  });
+  timeInput.addEventListener('input', ()=>{
+    const digits = timeInput.value.replace(/\D/g,'').slice(0,4);
+    let out=''; for(let i=0;i<digits.length;i++){ if(i===2) out+=':'; out+=digits[i]; }
+    timeInput.value = out; refreshCoordBox(); validateForm();
+  });
+
+  function validDate(dd,mm,yyyy){
+    if(!(yyyy>=1950 && yyyy<=2049)) return false;
+    if(!(mm>=1 && mm<=12)) return false;
+    const days = [31, ((yyyy%4===0 && yyyy%100!==0)||yyyy%400===0)?29:28, 31,30,31,30,31,31,30,31,30,31];
+    return dd>=1 && dd<=days[mm-1];
+  }
+  function validTime(hh,min){ return hh>=0 && hh<=23 && min>=0 && min<=59; }
+  function parsedDateOk(){
+    if(birthInput.value.length!==10 || (timeInput.value||'').length!==5) return false;
+    const [dd,mm,yyyy] = birthInput.value.split('/').map(Number);
+    const [hh,min] = timeInput.value.split(':').map(Number);
+    return validDate(dd,mm,yyyy) && validTime(hh,min);
+  }
+  function ageAt(dd,mm,yyyy){
+    const now = new Date();
+    let a = now.getFullYear() - yyyy;
+    const m = (now.getMonth()+1) - mm;
+    if(m < 0 || (m === 0 && now.getDate() < dd)) a--;
+    return a;
+  }
+  function placeOk(){
+    if(manualMode) return manualValid();
+    return countryInput.value!=='' && cityInput.value!=='';
+  }
+  function emailOk(){
+    const v = emailInput.value.trim();
+    if(!v) return true;
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+  }
+  emailInput.addEventListener('input', ()=>{
+    emailErr.classList.toggle('show', emailInput.value.trim()!=='' && !emailOk());
+    validateForm();
+  });
+
+  function validateForm(){
+    let msg = '';
+    dateErr.classList.remove('show');
+
+    if(birthInput.value.length===10){
+      const [dd,mm,yyyy] = birthInput.value.split('/').map(Number);
+      if(mm>=1 && mm<=12 && dd>=1 && dd<=31 && yyyy<1950){
+        dateErr.textContent = 'We prepare charts for birth dates from 1950 onwards. Earlier dates fall outside the range we can calculate reliably.';
+        dateErr.classList.add('show');
+      } else if(!validDate(dd,mm,yyyy)){
+        dateErr.textContent = 'That date doesn\'t exist on the calendar. Please check it.';
+        dateErr.classList.add('show');
+      } else if(ageAt(dd,mm,yyyy) < 18){
+        dateErr.textContent = 'This reading is written for adults. We can only prepare charts for people aged 18 and over.';
+        dateErr.classList.add('show');
+      }
+    }
+    if((timeInput.value||'').length===5){
+      const [hh,min] = timeInput.value.split(':').map(Number);
+      if(!validTime(hh,min)){
+        dateErr.textContent = 'Please enter the time in 24-hour format, between 00:00 and 23:59.';
+        dateErr.classList.add('show');
+      }
+    }
+
+    let adult = true;
+    if(birthInput.value.length===10){
+      const [dd,mm,yyyy] = birthInput.value.split('/').map(Number);
+      adult = validDate(dd,mm,yyyy) && ageAt(dd,mm,yyyy) >= 18;
+    }
+
+    const ok = nameInput.value.trim().length>0 && parsedDateOk() && adult && placeOk() && ranking.length===4 && emailOk();
+    genBtn.disabled = !ok;
+
+    if(!nameInput.value.trim()) msg = 'Start with your full name.';
+    else if(!parsedDateOk()) msg = 'Enter a complete birth date and time.';
+    else if(!adult) msg = '';
+    else if(!placeOk()) msg = 'Choose your country and city of birth — or enter coordinates manually.';
+    else if(ranking.length!==4) msg = 'Tap all four of Love, Career, Money and Legacy in your order of importance.';
+    else if(!emailOk()) msg = 'That email address doesn\'t look right.';
+    formHint.textContent = msg;
+    formHint.style.display = ok ? 'none' : 'block';
+  }
+
+  const countedFields = [['wishInput','wishCount'],['obstacleInput','obstacleCount'],
+                         ['crossroadsInput','crossroadsCount'],['extraInput','extraCount']];
+  countedFields.forEach(([fieldId,countId])=>{
+    const field = $(fieldId), counter = $(countId);
+    const max = parseInt(field.getAttribute('maxlength'),10) || 120;
+    const update = ()=>{ counter.textContent = (max - field.value.length) + ' characters left'; };
+    field.addEventListener('input', update); update();
+  });
+
+  document.querySelectorAll('.statusBtn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.statusBtn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active'); userStatus = btn.dataset.status;
+    });
+  });
+  document.querySelectorAll('.genBtnOpt').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.genBtnOpt').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active'); userGender = btn.dataset.gender;
+    });
+  });
+
+  const ORDINALS = ['','First','Second','Third','Fourth'];
+  document.querySelectorAll('.catBtn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const cat = btn.dataset.cat, idx = ranking.indexOf(cat);
+      if(idx>-1){ ranking.splice(idx,1); btn.classList.remove('active'); }
+      else{ ranking.push(cat); btn.classList.add('active'); }
+      renumber(); validateForm();
+    });
+  });
+  function renumber(){
+    document.querySelectorAll('.catBtn').forEach(b=>{
+      const i = ranking.indexOf(b.dataset.cat);
+      b.querySelector('.rankNum').textContent = i>-1 ? ORDINALS[i+1] : '';
+    });
+    rankSummary.textContent = ranking.length ? ranking.join('  \u203a  ').toUpperCase() : '';
+  }
+
+  nameInput.addEventListener('input', validateForm);
+  validateForm();
+
+  /* ---- prefill for returning customers (same device) ---- */
+  try{
+    const saved = JSON.parse(localStorage.getItem('ib_identity')||'null');
+    if(saved){
+      if(saved.name) nameInput.value = saved.name;
+      if(saved.occupation) occupationInput.value = saved.occupation;
+      if(saved.email) emailInput.value = saved.email;
+      if(saved.birth) birthInput.value = saved.birth;
+      if(saved.time) timeInput.value = saved.time;
+      if(saved.order) orderInput.value = saved.order;
+      if(saved.status) document.querySelectorAll('.statusBtn').forEach(b=>{ if(b.dataset.status===saved.status){ b.classList.add('active'); userStatus=saved.status; } });
+      if(saved.gender) document.querySelectorAll('.genBtnOpt').forEach(b=>{ if(b.dataset.gender===saved.gender){ b.classList.add('active'); userGender=saved.gender; } });
+      validateForm();
+    }
+  }catch(e){}
+
+  function showStep(id){
+    ['stepForm','stepChart','stepResult'].forEach(s=>$(s).classList.toggle('show', s===id));
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  genBtn.addEventListener('click', ()=>{
+    userName = nameInput.value.trim();
+    userBirth = birthInput.value.trim();
+    userTime = timeInput.value.trim();
+    userOccupation = occupationInput.value.trim();
+    userWish = wishInput.value.trim();
+    userObstacle = obstacleInput.value.trim();
+    userCrossroads = crossroadsInput.value.trim();
+    userExtra = extraInput.value.trim();
+    userEmail = emailInput.value.trim();
+    userOrder = orderInput.value.trim();
+
+    const [dd,mm,yyyy] = userBirth.split('/').map(Number);
+    const [hh,min] = userTime.split(':').map(Number);
+
+    if(manualMode){
+      userLat = parseFloat(latInput.value);
+      userLon = parseFloat(lonInput.value);
+      usedOffset = parseFloat(tzManual.value);
+      userCity = ''; userCountry = '';
+    } else {
+      usedOffset = effectiveOffset(userBaseOff, userDstRule, yyyy, mm, dd, hh, min, userTz);
+    }
+
+    const birthDateUTC = new Date(Date.UTC(yyyy, mm-1, dd, hh, min, 0) - usedOffset*3600000);
+    chart = computeChart(birthDateUTC, userLat, userLon, timeKnown);
+
+    try{
+      localStorage.setItem('ib_identity', JSON.stringify({
+        name:userName, occupation:userOccupation, email:userEmail, order:userOrder,
+        birth:userBirth, time:userTime, status:userStatus, gender:userGender
+      }));
+    }catch(e){}
+
+    showStep('stepChart');
+    progressBar.style.width = '12%';
+    revealChart();
+  });
+
+  $('editBtn').addEventListener('click', ()=>{
+    progressBar.style.width = '0%';
+    $('shareStatus').classList.remove('successMsg');
+    $('shareStatus').textContent = defaultHint;
+    showStep('stepForm');
+    validateForm();
+  });
+
+  /* =========================================================
+     DRAWING — night sky field, white chart disc
+     ========================================================= */
+  const chartCanvas = $('chartCanvas');
+  const cctx = chartCanvas.getContext('2d');
+  const chartInstruction = $('chartInstruction');
+
+  const DISC   = '#fbfaf6';          // the wheel itself stays paper-white
+  const DISC_E = '#e6e2d8';
+  const LINE   = '#274067';
+  const LINE_SOFT = 'rgba(39,64,103,0.35)';
+  const LINE_FAINT= 'rgba(39,64,103,0.16)';
+  const SKY_INK   = '#e9eefb';
+  const SKY_DIM   = '#8d99b8';
+  const SKY_LINE  = 'rgba(140,160,205,0.22)';
+  const EMBER     = '#d9743f';
+
+  function mulberry32(a){
+    return function(){
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      let t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+
+  /* the sky behind the chart — deterministic, so the same birth
+     moment always produces the same star field */
+  function drawSky(ctx, w, h, seed){
+    const g = ctx.createLinearGradient(0,0,0,h);
+    g.addColorStop(0,   '#101b33');
+    g.addColorStop(0.35,'#0b1224');
+    g.addColorStop(1,   '#070b16');
+    ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+
+    const rnd = mulberry32(Math.floor(seed*1000) || 12345);
+    const n = Math.round(w*h/2600);
+    for(let i=0;i<n;i++){
+      const x = rnd()*w, y = rnd()*h, r = rnd()*rnd()*1.5 + 0.25;
+      const a = 0.20 + rnd()*0.65;
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(255,255,255,'+a.toFixed(3)+')';
+      ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+    }
+    // a few brighter stars with a faint cross flare
+    for(let i=0;i<Math.round(n/34);i++){
+      const x = rnd()*w, y = rnd()*h, r = 1.2 + rnd()*1.1;
+      ctx.beginPath(); ctx.fillStyle='rgba(255,255,255,0.92)';
+      ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle='rgba(255,255,255,0.20)'; ctx.lineWidth=0.7;
+      ctx.beginPath(); ctx.moveTo(x-r*3.4,y); ctx.lineTo(x+r*3.4,y);
+      ctx.moveTo(x,y-r*3.4); ctx.lineTo(x,y+r*3.4); ctx.stroke();
+    }
+  }
+
+  /* collision-aware radial levels so glyphs never overlap */
+  function planetLevels(positions){
+    const order = positions.map((p,i)=>({i, lon:p.lon})).sort((a,b)=>a.lon-b.lon);
+    const level = new Array(positions.length).fill(0);
+    let prevLon = null, prevLevel = 0;
+    for(const o of order){
+      if(prevLon !== null && normDeg(o.lon - prevLon) < 9){
+        prevLevel = (prevLevel + 1) % 3;
+      } else prevLevel = 0;
+      level[o.i] = prevLevel;
+      prevLon = o.lon;
+    }
+    return level;
+  }
+
+  function drawWheel(ctx, cx, cy, R, ch, revealCount, aspectCount){
+    const asc = ch.ascendant, positions = ch.positions, aspects = ch.aspects;
+    const toScreenAngle = lon => normDeg(180 + (lon - asc)) * DEG;
+    const pt = (lon, r) => {
+      const a = toScreenAngle(lon);
+      return { x: cx + r*Math.cos(a), y: cy - r*Math.sin(a) };
+    };
+    const S = R/280;
+
+    // ---- the white disc the whole chart lives on ----
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,0.55)'; ctx.shadowBlur = 34*S;
+    ctx.beginPath(); ctx.fillStyle = DISC;
+    ctx.arc(cx,cy,R*1.11,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+    ctx.beginPath(); ctx.strokeStyle = 'rgba(217,116,63,0.55)'; ctx.lineWidth = 1.4*S;
+    ctx.arc(cx,cy,R*1.11,0,Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.strokeStyle = DISC_E; ctx.lineWidth = 1*S;
+    ctx.arc(cx,cy,R*1.075,0,Math.PI*2); ctx.stroke();
+
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+
+    // rings
+    ctx.lineWidth = 0.9*S; ctx.strokeStyle = LINE_SOFT;
+    ctx.beginPath(); ctx.arc(cx,cy,R+7*S,0,Math.PI*2); ctx.stroke();
+    ctx.lineWidth = 1.7*S; ctx.strokeStyle = LINE;
+    ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.stroke();
+    ctx.lineWidth = 1*S; ctx.strokeStyle = LINE_SOFT;
+    ctx.beginPath(); ctx.arc(cx,cy,R*0.82,0,Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx,cy,R*0.30,0,Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx,cy,R*0.255,0,Math.PI*2); ctx.stroke();
+
+    // centre mark
+    ctx.strokeStyle = LINE_FAINT; ctx.lineWidth = 0.8*S;
+    ctx.beginPath(); ctx.moveTo(cx-R*0.04,cy); ctx.lineTo(cx+R*0.04,cy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx,cy-R*0.04); ctx.lineTo(cx,cy+R*0.04); ctx.stroke();
+    ctx.beginPath(); ctx.fillStyle = LINE; ctx.arc(cx,cy,1.7*S,0,Math.PI*2); ctx.fill();
+
+    // degree ruler
+    for(let d=0; d<360; d++){
+      const len = (d%10===0) ? 11 : (d%5===0) ? 7 : 4;
+      const p1 = pt(d, R*0.82), p2 = pt(d, R*0.82 + len*S);
+      ctx.strokeStyle = (d%10===0) ? LINE_SOFT : LINE_FAINT;
+      ctx.lineWidth = (d%10===0) ? 1*S : 0.55*S;
+      ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y); ctx.stroke();
+    }
+
+    // zodiac band
+    for(let s=0;s<12;s++){
+      const lonB = s*30, col = ELEM_COLOR[SIGN_ELEMENT[s]];
+      const a1 = toScreenAngle(lonB), a2 = toScreenAngle(lonB+30);
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, -a1, -a2, true);
+      ctx.arc(cx, cy, R*0.82, -a2, -a1, false);
+      ctx.closePath();
+      ctx.fillStyle = col + '1c'; ctx.fill();
+      const p1 = pt(lonB, R*0.82), p2 = pt(lonB, R+7*S);
+      ctx.strokeStyle = LINE_SOFT; ctx.lineWidth = 1*S;
+      ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y); ctx.stroke();
+      const mid = pt(lonB+15, R*0.925);
+      ctx.fillStyle = col;
+      ctx.font = '600 ' + Math.round(R*0.068) + 'px sans-serif';
+      ctx.fillText(SIGN_GLYPH[s], mid.x, mid.y);
+      const cuspLab = pt(lonB+2.8, R*0.858);
+      ctx.fillStyle = LINE_FAINT;
+      ctx.font = Math.round(R*0.026) + 'px sans-serif';
+      ctx.fillText('0\u00b0', cuspLab.x, cuspLab.y);
+    }
+
+    // house cusps (Porphyry) + numbers
+    for(let h=1;h<=12;h++){
+      const lonB = ch.cusps[h];
+      const angle = (h===1||h===10) ? true : false;
+      const p1 = pt(lonB, R*0.255), p2 = pt(lonB, R*0.82);
+      ctx.strokeStyle = angle ? LINE : LINE_FAINT;
+      ctx.lineWidth = angle ? 1.8*S : 0.8*S;
+      if(angle) ctx.setLineDash([7*S, 4.5*S]);
+      ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y); ctx.stroke();
+      ctx.setLineDash([]);
+      const next = ch.cusps[h===12?1:h+1];
+      const midLon = normDeg(lonB + normDeg(next-lonB)/2);
+      const numPt = pt(midLon, R*0.295);
+      ctx.fillStyle = LINE_SOFT;
+      ctx.font = '600 ' + Math.round(R*0.038) + 'px sans-serif';
+      ctx.fillText(String(h), numPt.x, numPt.y);
+    }
+
+    // the four angles
+    const angles = [[asc,'ASC'],[ch.dsc,'DSC'],[ch.mc,'MC'],[ch.ic,'IC']];
+    ctx.font = '700 ' + Math.round(R*0.046) + 'px sans-serif';
+    angles.forEach(([lon,lab])=>{
+      const p = pt(lon, R*1.045);
+      ctx.fillStyle = (lab==='ASC'||lab==='MC') ? LINE : 'rgba(39,64,103,0.55)';
+      ctx.fillText(lab, p.x, p.y);
+    });
+
+    // aspect lines
+    const rAsp = R*0.24;
+    const nAsp = (aspectCount===undefined) ? aspects.length : aspectCount;
+    for(let k=0;k<nAsp && k<aspects.length;k++){
+      const asp = aspects[k];
+      if(asp.a >= revealCount || asp.b >= revealCount) continue;
+      const pA = pt(positions[asp.a].lon, rAsp), pB = pt(positions[asp.b].lon, rAsp);
+      ctx.strokeStyle = ASPECT_COLOR[asp.kind];
+      ctx.globalAlpha = asp.orb < 2 ? 0.9 : 0.55;
+      ctx.lineWidth = (asp.orb < 2 ? 1.8 : 0.9)*S;
+      ctx.beginPath(); ctx.moveTo(pA.x,pA.y); ctx.lineTo(pB.x,pB.y); ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+    for(let i=0;i<revealCount && i<positions.length;i++){
+      if(!positions[i].major) continue;
+      const pd = pt(positions[i].lon, rAsp);
+      ctx.beginPath(); ctx.fillStyle = LINE;
+      ctx.arc(pd.x, pd.y, 2.2*S, 0, Math.PI*2); ctx.fill();
+    }
+
+    // planets and points
+    const lv = planetLevels(positions);
+    for(let i=0;i<revealCount && i<positions.length;i++){
+      const p = positions[i];
+      const col = ELEM_COLOR[p.elem];
+      const rr = R*0.615 - lv[i]*(R*0.072);
+      const pp = pt(p.lon, rr), ringPt = pt(p.lon, R*0.82);
+      ctx.strokeStyle = LINE_FAINT; ctx.lineWidth = 0.8*S;
+      ctx.beginPath(); ctx.moveTo(ringPt.x,ringPt.y); ctx.lineTo(pp.x,pp.y); ctx.stroke();
+      const discR = R*(p.major?0.050:0.042);
+      ctx.beginPath();
+      ctx.fillStyle = '#ffffff'; ctx.strokeStyle = col;
+      ctx.lineWidth = (p.major?1.7:1.1)*S;
+      if(!p.major) ctx.setLineDash([2.5*S,2*S]);
+      ctx.arc(pp.x, pp.y, discR, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = col;
+      ctx.font = '600 ' + Math.round(R*(p.major?0.052:0.044)) + 'px sans-serif';
+      ctx.fillText(p.glyph, pp.x, pp.y + R*0.004);
+      ctx.fillStyle = LINE;
+      ctx.font = Math.round(R*0.031) + 'px sans-serif';
+      ctx.fillText(degMin(p.deg) + (p.retro ? ' \u211e' : ''), pp.x, pp.y + discR + R*0.036);
+    }
+  }
+
+  /* ---------- the reveal animation ---------- */
+  function revealChart(){
+    const W = chartCanvas.width, H = chartCanvas.height;
+    const cx = W/2, cy = H/2, R = 268;
+    let revealCount = 0;
+    const redraw = (rc, ac)=>{
+      drawSky(cctx, W, H, chart.jd);
+      drawWheel(cctx, cx, cy, R, chart, rc, ac);
+    };
+    redraw(0,0);
+    const names = ['the Sun','the Moon','Mercury','Venus','Mars','Jupiter','Saturn','Uranus','Neptune','Pluto',
+                   'your North Node','your South Node','Lilith','your Part of Fortune'];
+
+    const planetStep = ()=>{
+      revealCount++;
+      redraw(revealCount, 0);
+      progressBar.style.width = (12 + revealCount/chart.positions.length*58) + '%';
+      chartInstruction.textContent = 'Placing ' + (names[revealCount-1]||'') + '\u2026';
+      if(revealCount < chart.positions.length) setTimeout(planetStep, 430);
+      else{
+        chartInstruction.textContent = 'Measuring the angles between your planets\u2026';
+        setTimeout(()=>aspectStep(0), 650);
+      }
+    };
+    const aspectStep = (n)=>{
+      redraw(chart.positions.length, n);
+      progressBar.style.width = (70 + (chart.aspects.length ? n/chart.aspects.length : 1)*25) + '%';
+      if(n < chart.aspects.length) setTimeout(()=>aspectStep(n+1), 190);
+      else{
+        chartInstruction.textContent = 'Your chart is complete.';
+        progressBar.style.width = '96%';
+        setTimeout(finish, 850);
+      }
+    };
+    setTimeout(planetStep, 700);
+  }
+
+  /* =========================================================
+     RESULT — stamped image, dynamic height
+     ========================================================= */
+  const canvas = $('resultCanvas');
+  const ctx = canvas.getContext('2d');
+  const shareStatus = $('shareStatus');
+  const defaultHint = shareStatus.textContent;
+
+  function wrapLines(ctx, text, maxW){
+    const words = String(text).split(' '); const lines=[]; let cur='';
+    for(const w of words){ const test = cur?cur+' '+w:w;
+      if(ctx.measureText(test).width>maxW && cur){ lines.push(cur); cur=w; } else cur=test; }
+    if(cur) lines.push(cur); return lines;
+  }
+  function ordinal(n){
+    const s=['th','st','nd','rd'], v=n%100;
+    return n + (s[(v-20)%10] || s[v] || s[0]);
+  }
+
+  function personalFields(){
+    const out = [];
+    if(userGender) out.push(['Gender', userGender]);
+    if(userOccupation) out.push(['Occupation', userOccupation]);
+    if(userStatus) out.push(['Status', userStatus]);
+    if(userWish) out.push(['Wish', userWish]);
+    if(userObstacle) out.push(['Obstacle', userObstacle]);
+    if(userCrossroads) out.push(['Crossroads', userCrossroads]);
+    if(userExtra) out.push(['Note', userExtra]);
+    if(userOrder) out.push(['Etsy order', userOrder]);
+    if(userEmail) out.push(['Email', userEmail]);
+    return out;
+  }
+
+  function finish(){
+    const W = 900, wR = 268, PAD = 62, colW = (W - PAD*2)/2;
+    const asp = chart.aspects, pos = chart.positions;
+    const fields = personalFields();
+
+    // ---- measure ----
+    ctx.font = '13px sans-serif';
+    let fieldLines = 0;
+    fields.forEach(([l,v])=>{ fieldLines += wrapLines(ctx, l+': '+v, W-PAD*2).length; });
+
+    let H = 34;                      // top
+    H += 118;                        // header
+    H += wR*2.22 + 46;               // wheel disc
+    H += 40;                         // aspect legend
+    H += 104;                        // big three
+    H += 34 + 2*24 + 20;             // angles
+    H += 34 + Math.ceil(pos.length/2)*25 + 20;   // positions
+    H += 34 + 6*23 + 20;             // houses
+    H += 34 + Math.ceil(asp.length/2)*22 + 20;   // aspects
+    H += 34 + 4*23 + 20;             // balance
+    H += 34 + fieldLines*20 + 20;    // personal
+    H += 96;                         // footer + disclaimer
+    H = Math.round(H);
+
+    canvas.width = W; canvas.height = H;
+    drawSky(ctx, W, H, chart.jd);
+
+    let y = 34;
+    const sectionHead = (label)=>{
+      y += 16;
+      ctx.textAlign='left'; ctx.fillStyle = EMBER;
+      ctx.font = '700 12px sans-serif';
+      ctx.fillText(label.toUpperCase().split('').join('\u2009'), PAD, y);
+      y += 9;
+      ctx.strokeStyle = SKY_LINE; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W-PAD, y); ctx.stroke();
+      y += 22;
+    };
+
+    // ---- header ----
+    ctx.textAlign = 'center';
+    ctx.fillStyle = EMBER; ctx.font = '700 14px sans-serif';
+    ctx.fillText('IRONBREAKER\u2009F\u2009O\u2009R\u2009E\u2009S\u2009E\u2009E\u2009S \u2014 BIRTH CHART READING', W/2, y+16);
+    ctx.fillStyle = SKY_INK; ctx.font = '600 30px Georgia, serif';
+    ctx.fillText('Your Sky At Birth', W/2, y+58);
+    ctx.font = 'italic 14px Georgia, serif'; ctx.fillStyle = SKY_DIM;
+    ctx.fillText('Most horoscope tests only look at your Sun. This is the entire sky.', W/2, y+85);
+    y += 118;
+
+    // ---- wheel ----
+    const wcy = y + wR*1.11;
+    drawWheel(ctx, W/2, wcy, wR, chart, pos.length, undefined);
+    y = wcy + wR*1.11 + 46;
+
+    // ---- aspect legend ----
+    ctx.font = '12px sans-serif'; ctx.textAlign = 'left';
+    const legend = [['\u2014 tension (square / opposition)','#e05a44'],
+                    ['\u2014 harmony (trine / sextile)','#59c98c'],
+                    ['\u2014 fusion (conjunction)','#e8ba33']];
+    let lx = PAD;
+    legend.forEach(([txt,col])=>{ ctx.fillStyle = col; ctx.fillText(txt, lx, y); lx += ctx.measureText(txt).width + 30; });
+    y += 40;
+
+    // ---- big three ----
+    const sun = pos[0], moon = pos[1];
+    const boxW = (W - PAD*2 - 24)/3;
+    [['SUN', sun.glyph+'  '+sun.sign, ELEM_COLOR_DARK[sun.elem], degMin(sun.deg)],
+     ['MOON', moon.glyph+'  '+moon.sign, ELEM_COLOR_DARK[moon.elem], degMin(moon.deg)],
+     ['RISING', chart.ascSign.glyph+'  '+chart.ascSign.sign, ELEM_COLOR_DARK[chart.ascSign.elem], degMin(chart.ascSign.deg)]
+    ].forEach(([lab,val,col,sub],i)=>{
+      const bx = PAD + i*(boxW+12);
+      ctx.strokeStyle = SKY_LINE; ctx.lineWidth = 1;
+      ctx.fillStyle = 'rgba(255,255,255,0.035)';
+      ctx.beginPath(); ctx.rect(bx, y, boxW, 84); ctx.fill(); ctx.stroke();
+      ctx.textAlign='center';
+      ctx.fillStyle = SKY_DIM; ctx.font = '700 10px sans-serif';
+      ctx.fillText(lab.split('').join('\u2009'), bx+boxW/2, y+21);
+      ctx.fillStyle = col; ctx.font = '600 20px Georgia, serif';
+      ctx.fillText(val, bx+boxW/2, y+50);
+      ctx.fillStyle = SKY_DIM; ctx.font = '12px sans-serif';
+      ctx.fillText(sub, bx+boxW/2, y+70);
+    });
+    y += 104;
+    ctx.textAlign='left';
+
+    // ---- angles ----
+    sectionHead('The Four Angles');
+    ctx.font = '13.5px sans-serif';
+    const angleRows = [
+      ['Ascendant (1st house cusp)', fullPos(chart.ascendant)],
+      ['Midheaven / MC (10th cusp)', fullPos(chart.mc)],
+      ['Descendant (7th cusp)', fullPos(chart.dsc)],
+      ['Imum Coeli / IC (4th cusp)', fullPos(chart.ic)]
+    ];
+    angleRows.forEach((r,i)=>{
+      const col = i%2, row = Math.floor(i/2);
+      const x = PAD + col*colW, yy = y + row*24;
+      ctx.fillStyle = SKY_DIM; ctx.fillText(r[0]+':', x, yy);
+      ctx.fillStyle = SKY_INK;
+      ctx.fillText(r[1], x + ctx.measureText(r[0]+': ').width, yy);
+    });
+    y += 2*24 + 20;
+
+    // ---- positions ----
+    sectionHead('Planets, Points & Houses');
+    ctx.font = '13px sans-serif';
+    pos.forEach((p,i)=>{
+      const col = i%2, row = Math.floor(i/2);
+      const x = PAD + col*colW, yy = y + row*25;
+      ctx.fillStyle = ELEM_COLOR_DARK[p.elem];
+      ctx.fillText(p.glyph, x, yy);
+      ctx.fillStyle = SKY_INK;
+      const txt = p.key + '  ' + degMin(p.deg) + ' ' + p.sign + (p.retro?'  \u211e':'');
+      const txtW = ctx.measureText(txt).width;
+      ctx.fillText(txt, x+20, yy);
+      ctx.fillStyle = SKY_DIM; ctx.font = '11.5px sans-serif';
+      ctx.fillText(ordinal(p.house)+' house', x+28+txtW, yy);
+      ctx.font = '13px sans-serif';
+    });
+    y += Math.ceil(pos.length/2)*25 + 20;
+
+    // ---- houses ----
+    sectionHead('Your Twelve Houses');
+    ctx.font = '12.5px sans-serif';
+    chart.houses.forEach((hs,i)=>{
+      const col = i%2, row = Math.floor(i/2);
+      const x = PAD + col*colW, yy = y + row*23;
+      ctx.fillStyle = EMBER; ctx.fillText(String(hs.num).padStart(2,' '), x, yy);
+      ctx.fillStyle = SKY_INK; ctx.fillText(hs.meaning, x+24, yy);
+      ctx.fillStyle = ELEM_COLOR_DARK[hs.elem];
+      ctx.fillText(degMin(hs.deg)+' '+hs.sign, x+24+205, yy);
+    });
+    y += 6*23 + 20;
+
+    // ---- aspects ----
+    sectionHead('Aspects  \u00b7  ' + asp.length + ' found');
+    ctx.font = '12.5px sans-serif';
+    asp.forEach((a,i)=>{
+      const col = i%2, row = Math.floor(i/2);
+      const x = PAD + col*colW, yy = y + row*22;
+      ctx.fillStyle = ASPECT_COLOR[a.kind]==='#c92f1e' ? '#e05a44'
+                    : ASPECT_COLOR[a.kind]==='#1e7d43' ? '#59c98c' : '#e8ba33';
+      ctx.fillText('\u25cf', x, yy);
+      ctx.fillStyle = SKY_INK;
+      ctx.fillText(pos[a.a].key + ' ' + a.name.toLowerCase() + ' ' + pos[a.b].key, x+16, yy);
+      ctx.fillStyle = SKY_DIM; ctx.font = '11px sans-serif';
+      ctx.fillText('orb ' + a.orb.toFixed(1) + '\u00b0', x + colW - 76, yy);
+      ctx.font = '12.5px sans-serif';
+    });
+    y += Math.ceil(asp.length/2)*22 + 20;
+
+    // ---- balance ----
+    sectionHead('Balance & Signature');
+    ctx.font = '13px sans-serif';
+    const ec = chart.elemCount, mc2 = chart.modeCount;
+    const balRows = [
+      ['Elements', 'Fire '+ec.fire+'  \u00b7  Earth '+ec.earth+'  \u00b7  Air '+ec.air+'  \u00b7  Water '+ec.water +
+                   '   \u2192  ' + chart.dominantElem.charAt(0).toUpperCase()+chart.dominantElem.slice(1) + ' dominant'],
+      ['Modalities', 'Cardinal '+mc2.cardinal+'  \u00b7  Fixed '+mc2.fixed+'  \u00b7  Mutable '+mc2.mutable +
+                   '   \u2192  ' + chart.dominantMode.charAt(0).toUpperCase()+chart.dominantMode.slice(1) + ' dominant'],
+      ['Chart ruler', chart.chartRuler + (chart.rulerPos ? ' in ' + chart.rulerPos.sign + ', ' + ordinal(chart.rulerPos.house) + ' house' : '')],
+      ['Moon phase', chart.phase.name + '  \u00b7  ' + (chart.isDay ? 'a day birth (Sun above the horizon)' : 'a night birth (Sun below the horizon)')]
+    ];
+    balRows.forEach((r,i)=>{
+      const yy = y + i*23;
+      ctx.fillStyle = SKY_DIM; ctx.fillText(r[0]+':', PAD, yy);
+      ctx.fillStyle = SKY_INK; ctx.fillText(r[1], PAD+108, yy);
+    });
+    y += 4*23 + 20;
+
+    // ---- the person ----
+    sectionHead('The Person');
+    ctx.fillStyle = SKY_INK; ctx.font = '600 17px Georgia, serif';
+    ctx.fillText(userName + '  \u00b7  ' + userBirth + '  ' + userTime + (timeKnown?'':'  (time unknown \u2014 noon chart)'), PAD, y);
+    y += 24;
+    ctx.font = '13px sans-serif'; ctx.fillStyle = SKY_DIM;
+    const place = userCity ? (userCity + ', ' + userCountry + '   ') : 'Manual coordinates   ';
+    ctx.fillText('Born: ' + place + '(' + Math.abs(userLat).toFixed(4)+'\u00b0 '+(userLat>=0?'N':'S') + ', ' +
+                 Math.abs(userLon).toFixed(4)+'\u00b0 '+(userLon>=0?'E':'W') + ', ' + offsetLabel(usedOffset) + ')', PAD, y);
+    y += 22;
+    ctx.fillStyle = EMBER; ctx.font = '700 13px sans-serif';
+    ctx.fillText('Priorities:  ' + ranking.join('  \u203a  '), PAD, y);
+    y += 24;
+    ctx.font = '13px sans-serif';
+    fields.forEach(([label,val])=>{
+      const lines = wrapLines(ctx, label+': '+val, W-PAD*2);
+      lines.forEach((ln,k)=>{
+        ctx.fillStyle = k===0 ? SKY_DIM : SKY_DIM;
+        ctx.fillText(ln, PAD, y); y += 20;
+      });
+    });
+
+    // ---- footer ----
+    y += 20;
+    ctx.textAlign='center';
+    ctx.strokeStyle = SKY_LINE; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W-PAD, y); ctx.stroke();
+    y += 26;
+    ctx.fillStyle = SKY_DIM; ctx.font = 'italic 12.5px Georgia, serif';
+    if(!timeKnown){
+      ctx.fillText('Birth time unknown \u2014 cast for 12:00 local. Planetary positions hold; the rising sign and house cusps are indicative only.', W/2, y);
+      y += 20;
+    }
+    ctx.fillText('Positions calculated for the exact moment and place above. Placidus users may see house cusps differ \u2014 this chart uses Porphyry.', W/2, y);
+    y += 20;
+    ctx.fillStyle = 'rgba(141,153,184,0.72)'; ctx.font = '11px sans-serif';
+    ctx.fillText('For self-exploration, creative reflection and entertainment. Not medical, financial, legal or psychological advice.', W/2, y);
+
+    // ---- on-page summary card ----
+    $('bigSun').textContent  = sun.glyph + ' ' + sun.sign;
+    $('bigMoon').textContent = moon.glyph + ' ' + moon.sign;
+    $('bigAsc').textContent  = chart.ascSign.glyph + ' ' + chart.ascSign.sign;
+    $('sumLines').innerHTML =
+      '<b>Chart ruler:</b> ' + chart.chartRuler + (chart.rulerPos ? ' in ' + chart.rulerPos.sign + ', ' + ordinal(chart.rulerPos.house) + ' house' : '') + '<br>' +
+      '<b>Dominant element:</b> ' + chart.dominantElem + ' &nbsp;·&nbsp; <b>Modality:</b> ' + chart.dominantMode + '<br>' +
+      '<b>Moon phase at birth:</b> ' + chart.phase.name + '<br>' +
+      '<b>Aspects found:</b> ' + asp.length + ' &nbsp;·&nbsp; ' +
+      (chart.isDay ? 'a day birth' : 'a night birth');
+
+    progressBar.style.width = '100%';
+    showStep('stepResult');
+  }
+
+  /* =========================================================
+     SAVE / SHARE / COPY
+     ========================================================= */
+  function dataUrlToBlob(dataUrl){
+    const [meta,b64] = dataUrl.split(','); const mime = meta.match(/:(.*?);/)[1];
+    const bin = atob(b64); const arr = new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++) arr[i]=bin.charCodeAt(i);
+    return new Blob([arr],{type:mime});
+  }
+  function getImageDataUrl(){ return canvas.toDataURL('image/png'); }
+
+  function buildShareText(){
+    const p = chart.positions;
+    let t = 'BIRTH CHART READING \u2014 Ironbreaker Foresees\n';
+    t += '\nName: '+userName;
+    t += '\nBorn: '+userBirth+' '+userTime+(timeKnown?'':' (time unknown \u2014 noon chart)');
+    t += '\nPlace: '+(userCity ? userCity+', '+userCountry : 'manual coordinates')+
+         ' ('+Math.abs(userLat).toFixed(4)+(userLat>=0?'N':'S')+', '+Math.abs(userLon).toFixed(4)+(userLon>=0?'E':'W')+', '+offsetLabel(usedOffset)+')';
+    if(userOrder) t += '\nEtsy order: '+userOrder;
+    t += '\n\nSun '+fullPos(p[0].lon)+'  |  Moon '+fullPos(p[1].lon)+'  |  Rising '+fullPos(chart.ascendant);
+    t += '\nMC '+fullPos(chart.mc);
+    t += '\n\nPLACEMENTS';
+    p.forEach(x=>{ t += '\n'+x.key+': '+degMin(x.deg)+' '+x.sign+(x.retro?' R':'')+', '+ordinal(x.house)+' house'; });
+    t += '\n\nBALANCE\nElements — fire '+chart.elemCount.fire+', earth '+chart.elemCount.earth+', air '+chart.elemCount.air+', water '+chart.elemCount.water;
+    t += '\nModalities — cardinal '+chart.modeCount.cardinal+', fixed '+chart.modeCount.fixed+', mutable '+chart.modeCount.mutable;
+    t += '\nChart ruler: '+chart.chartRuler+(chart.rulerPos?' in '+chart.rulerPos.sign:'');
+    t += '\nMoon phase: '+chart.phase.name+' \u00b7 '+(chart.isDay?'day birth':'night birth');
+    t += '\n\nASPECTS ('+chart.aspects.length+')';
+    chart.aspects.forEach(a=>{ t += '\n'+p[a.a].key+' '+a.name.toLowerCase()+' '+p[a.b].key+' (orb '+a.orb.toFixed(1)+'\u00b0)'; });
+    t += '\n\nABOUT ME';
+    personalFields().forEach(([l,v])=>{ t += '\n'+l+': '+v; });
+    t += '\nPriorities: '+ranking.join(' > ');
+    return t;
+  }
+
+  function triggerDownload(dataUrl, filename){
+    if(isSafari){
+      try{
+        const w = window.open(dataUrl, '_blank');
+        shareStatus.classList.add('successMsg');
+        shareStatus.textContent = w ? 'Opened in a new tab \u2014 tap the share icon (or long-press the image) to save.'
+                                    : 'Pop-up blocked \u2014 long-press the image on screen and tap Save.';
+        return;
+      }catch(e){
+        shareStatus.classList.remove('successMsg');
+        shareStatus.textContent = 'Long-press the image on screen and tap Save.';
+        return;
+      }
+    }
+    try{
+      const a = document.createElement('a'); a.href = dataUrl; a.download = filename;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      shareStatus.classList.add('successMsg'); shareStatus.textContent = 'Saved \u2014 check your downloads.';
+    }catch(e){
+      shareStatus.classList.remove('successMsg');
+      try{ window.open(dataUrl,'_blank'); shareStatus.textContent = 'Opened in a new tab \u2014 long-press and save.'; }
+      catch(e2){ shareStatus.textContent = 'Auto-save isn\'t supported in this browser. Long-press the image and save.'; }
+    }
+  }
+
+  $('sendBtn').addEventListener('click', (e)=>{
+    const btn = e.currentTarget;
+    let dataUrl;
+    try{ dataUrl = getImageDataUrl(); }
+    catch(err){ shareStatus.classList.remove('successMsg'); shareStatus.textContent = 'Could not capture the image. Long-press it and save manually.'; return; }
+    let file = null;
+    try{ file = new File([dataUrlToBlob(dataUrl)],'birth-chart-reading.png',{type:'image/png'}); }catch(err){}
+    if(file && navigator.canShare && navigator.canShare({files:[file]})){
+      btn.disabled = true; shareStatus.classList.remove('successMsg'); shareStatus.textContent = 'Opening share sheet\u2026';
+      navigator.share({files:[file], text:buildShareText()})
+        .then(()=>{ shareStatus.classList.add('successMsg'); shareStatus.textContent = 'Sent.'; })
+        .catch((err)=>{
+          if(err && err.name==='AbortError'){ shareStatus.classList.remove('successMsg'); shareStatus.textContent = defaultHint; }
+          else triggerDownload(dataUrl,'birth-chart-reading.png');
+        })
+        .finally(()=>{ btn.disabled = false; });
+    } else triggerDownload(dataUrl, 'birth-chart-reading.png');
+  });
+
+  $('copyBtn').addEventListener('click', async ()=>{
+    const txt = buildShareText();
+    try{
+      await navigator.clipboard.writeText(txt);
+      shareStatus.classList.add('successMsg');
+      shareStatus.textContent = 'Copied \u2014 paste it into Etsy Messages with your image.';
+    }catch(e){
+      const ta = document.createElement('textarea');
+      ta.value = txt; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); shareStatus.classList.add('successMsg'); shareStatus.textContent='Copied to your clipboard.'; }
+      catch(e2){ shareStatus.classList.remove('successMsg'); shareStatus.textContent='Couldn\'t copy automatically \u2014 the image alone is enough.'; }
+      document.body.removeChild(ta);
+    }
+  });
+</script>
+</body>
+</html>
